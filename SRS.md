@@ -425,3 +425,138 @@ Bước 10: Xác định Non-Functional Requirement
 |---|---|---|
 | **NFR-12** | **Giao diện Người dùng (UI/UX)** | - Thiết kế tối giản, cho phép Khách hàng thực hiện thao tác đặt xe thành công trong **không quá 3 bước** chạm.<br>- Giao diện ứng dụng tài xế hiển thị nút nhận chuyến to, rõ ràng, dễ thao tác an toàn khi đang lái xe. |
 | **NFR-13** | **Tương thích Thiết bị** | - Ứng dụng di động hoạt động tốt trên cả 2 hệ điều hành: **Android (từ phiên bản 8.0 trở lên)** và **iOS (từ phiên bản 13.0 trở lên)**.<br>- Trang Admin tương thích tốt trên các trình duyệt hiện đại (Chrome, Safari, Edge). |
+
+Bước 11: Vẽ usecase(UC)
+# BƯỚC 11: SƠ ĐỒ VÀ DANH SÁCH USE CASE (USE CASE DIAGRAMS & LIST)
+
+---
+
+### 1. Sơ đồ Use Case Tổng quan (System Overview)
+
+```mermaid
+graph LR
+    %% Actors
+    subgraph Actors
+        Customer((Khách hàng))
+        Driver((Tài xế))
+        Operator((Nhân viên Vận hành))
+        PaymentGW[("Cổng Thanh toán")]
+        MapService[("Dịch vụ Bản đồ")]
+    end
+
+    %% System Boundary
+    subgraph CAB_System ["HỆ THỐNG ĐẶT XE CAB"]
+        
+        %% Customer Use Cases
+        subgraph Customer_UC ["Phân hệ Khách hàng"]
+            UC_RegCust("UC-01: Đăng ký / Đăng nhập")
+            UC_BookTrip("UC-02: Đặt xe mới")
+            UC_TrackTrip("UC-03: Theo dõi Chuyến đi")
+            UC_PayTrip("UC-04: Thanh toán Chuyến đi")
+            UC_ReviewTrip("UC-05: Đánh giá & Góp ý")
+            UC_TripHistory("UC-06: Xem Lịch sử Chuyến đi")
+        end
+
+        %% Driver Use Cases
+        subgraph Driver_UC ["Phân hệ Tài xế"]
+            UC_RegDriver("UC-07: Đăng ký Hồ sơ Tài xế")
+            UC_ToggleOnline("UC-08: Bat / Tat Trạng thái Online")
+            UC_AcceptTrip("UC-09: Nhận / Từ chối Chuyến đi")
+            UC_UpdateStatus("UC-10: Cập nhật Trạng thái Chuyến đi")
+            UC_DriverEarnings("UC-11: Xem Thu nhập")
+        end
+
+        %% Operator Use Cases
+        subgraph Ops_UC ["Phân hệ Quản trị & Vận hành"]
+            UC_ApproveDriver("UC-12: Duyệt Hồ sơ Tài xế")
+            UC_MonitorTrips("UC-13: Giám sát Chuyến đi Real-time")
+            UC_HandleSupport("UC-14: Xử lý Khiếu nại / Cố định Chuyến đi")
+            UC_ManageReports("UC-15: Xem Báo cáo Doanh thu & Vận hành")
+        end
+
+    end
+
+    %% Relationships - Customer
+    Customer --> UC_RegCust
+    Customer --> UC_BookTrip
+    Customer --> UC_TrackTrip
+    Customer --> UC_PayTrip
+    Customer --> UC_ReviewTrip
+    Customer --> UC_TripHistory
+
+    %% Relationships - Driver
+    Driver --> UC_RegDriver
+    Driver --> UC_ToggleOnline
+    Driver --> UC_AcceptTrip
+    Driver --> UC_UpdateStatus
+    Driver --> UC_DriverEarnings
+
+    %% Relationships - Operator
+    Operator --> UC_ApproveDriver
+    Operator --> UC_MonitorTrips
+    Operator --> UC_HandleSupport
+    Operator --> UC_ManageReports
+
+    %% External Systems Relations
+    UC_BookTrip -.->|include| MapService
+    UC_TrackTrip -.->|include| MapService
+    UC_PayTrip -.->|include| PaymentGW
+```
+Bước 12: Tạo đặc tả usecase
+# BƯỚC 12: ĐẶC TẢ USE CASE CHI TIẾT (USE CASE SPECIFICATION)
+
+---
+
+## ĐẶC TẢ USE CASE: UC-02 - ĐẶT XE MỚI (BOOK A TRIP)
+
+### 1. Thông tin Tổng quan (Overview Information)
+
+| Thuộc tính | Giá trị / Mô tả |
+|---|---|
+| **Mã Use Case (ID)** | **UC-02** |
+| **Tên Use Case** | Đặt xe mới (Book a New Trip) |
+| **Tác nhân chính (Primary Actor)** | Khách hàng (Customer) |
+| **Tác nhân phụ (Secondary Actors)** | Tài xế (Driver), Dịch vụ Bản đồ (Map API), Cổng Thanh toán (Payment Gateway) |
+| **Mô tả Tóm tắt** | Cho phép Khách hàng chọn điểm đón/trả, xem giá cước tạm tính, chọn phương thức thanh toán và gửi yêu cầu tìm tài xế gần nhất. |
+| **Mức độ Ưu tiên** | High (Cốt lõi) |
+
+---
+
+### 2. Điều kiện Tiên quyết & Điều kiện Sau (Pre & Post Conditions)
+
+*   **Điều kiện Tiên quyết (Preconditions):**
+    1. Khách hàng đã đăng nhập thành công vào ứng dụng mobile.
+    2. Thiết bị đã bật dịch vụ vị trí (GPS) và có kết nối Internet.
+    3. Tài khoản Khách hàng ở trạng thái `ACTIVE` (không bị khóa).
+*   **Điều kiện Sau (Postconditions):**
+    1. Mới một bản ghi Chuyến đi (`TRIP`) được tạo trên cơ sở dữ liệu với trạng thái `SEARCHING`.
+    2. Thông báo tìm xe được gửi tới các Tài xế phù hợp xung quanh bán kính điểm đón.
+
+---
+
+### 3. Luồng Sự kiện Chính (Main Success Scenario / Happy Path)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor C as Khách hàng
+    participant App as App Mobile
+    participant Backend as CAB System
+    participant Map as Map Service API
+    actor D as Tài xế
+
+    C->>App: Mở màn hình Đặt xe
+    App->>Map: Lấy vị trí GPS hiện tại
+    Map-->>App: Trả về tọa độ & địa chỉ gợi ý
+    C->>App: Nhập điểm đến (Dropoff Location)
+    App->>Map: Tính khoảng cách & thời gian di chuyển
+    Map-->>App: Trả về Lộ trình & Khoảng cách
+    App->>Backend: Yêu cầu tính giá cước ước tính
+    Backend-->>App: Trả về Danh sách loại xe & Giá cước (CAR_4, CAR_7, BIKE)
+    C->>App: Chọn loại xe & Phương thức thanh toán (Tiền mặt/Thẻ)
+    C->>App: Nhấn nút "Đặt xe"
+    App->>Backend: Gửi Request `POST /trips/create`
+    Backend->>Backend: Tạo bản ghi TRIP (status = SEARCHING)
+    Backend-->>App: Xác nhận tạo chuyến & Hiển thị màn hình "Đang tìm tài xế..."
+    Backend->>D: Phát tín hiệu cuốc xe mới tới các tài xế gần nhất
+```
