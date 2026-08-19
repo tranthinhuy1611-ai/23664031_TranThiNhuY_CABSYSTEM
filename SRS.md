@@ -156,3 +156,113 @@ Nhằm đảm bảo mục tiêu **triển khai thành công trong 7 tuần**, h�
 - **Tích hợp thêm phương thức thanh toán:** Kết nối thêm các cổng thanh toán mới, ví điện tử (Momo, VNPay, ZaloPay).
 - **Mở rộng kênh thông báo:** Thêm nhà cung cấp dịch vụ SMS/OTT mới để tối ưu chi phí vận hành.
 - **Nâng cấp thuật toán ghép chuyến:** Cấu hình linh hoạt các tiêu chí ưu tiên tài xế và điều chỉnh thời gian phản hồi theo thời điểm.
+
+Bước 5: Thiết kế Business Requirement
+# BƯỚC 5: THIẾT KẾ YÊU CẦU NGHIỆP VỤ CHI TIẾT (BUSINESS REQUIREMENTS)
+
+---
+
+### 1. Danh sách Yêu cầu Chức năng (Functional Requirements - FR)
+
+| Mã YC | Module | Tác nhân chính | Mô tả Chức năng Nghiệp vụ |
+|---|---|---|---|
+| **FR-01** | Quản lý Tài khoản | Khách hàng, Tài xế, Admin | Cho phép đăng ký, đăng nhập, cập nhật thông tin cá nhân. Tài xế bổ sung thông tin phương tiện, hồ sơ hành nghề. |
+| **FR-02** | Quản lý Trạng thái | Tài xế | Cho phép tài xế chuyển đổi trạng thái Hoạt động/Sẵn sàng nhận chuyến hoặc Tạm ngưng làm việc. |
+| **FR-03** | Đặt xe | Khách hàng | Khách hàng nhập điểm đón, điểm đến, chọn loại xe và gửi yêu cầu đặt xe lên hệ thống. |
+| **FR-04** | Định vị GPS | Tài xế, Hệ thống | Hệ thống thu thập và lưu vết dữ liệu vị trí GPS của tài xế theo thời gian thực. |
+| **FR-05** | Ghép chuyến Tự động | Hệ thống | Tự động tìm kiếm và ưu tiên đề xuất chuyến đi cho tài xế phù hợp dựa trên khoảng cách GPS và trạng thái sẵn sàng. |
+| **FR-06** | Xử lý Bỏ qua/Từ chối | Hệ thống, Tài xế | Cho phép tài xế chấp nhận hoặc từ chối chuyến. Nếu tài xế từ chối/không phản hồi, hệ thống tự động chuyển sang tài xế tiếp theo mà khách không cần thao tác lại. |
+| **FR-07** | Theo dõi Tiến trình | Khách hàng, Tài xế | Cập nhật và hiển thị trạng thái chuyến đi (*Đã nhận chuyến, Đã đến điểm đón, Đã đón khách, Đang di chuyển, Hoàn thành*). Khách hàng xem vị trí tài xế thực tế. |
+| **FR-08** | Tính cước | Hệ thống | Tự động tính tổng tiền chuyến đi dựa trên loại dịch vụ và thông tin quãng đường sau khi hoàn thành chuyến. |
+| **FR-09** | Thanh toán | Khách hàng, Hệ thống | Hỗ trợ thanh toán Tiền mặt hoặc Thanh toán điện tử (kết nối Cổng thanh toán bên ngoài). Cho phép xử lý lại nếu giao dịch thất bại. |
+| **FR-10** | Hệ thống Thông báo | Khách hàng, Tài xế | Gửi thông báo đa kênh (Push Notification/SMS) cập nhật trạng thái chuyến đi, phân công chuyến mới và kết quả thanh toán. |
+| **FR-11** | Đánh giá & Lịch sử | Khách hàng | Khách hàng xem lại lịch sử các chuyến đi, số tiền đã trả và gửi đánh giá (sao/nhận xét) cho tài xế. |
+| **FR-12** | Quản trị & Báo cáo | Nhân viên Vận hành | Giao diện Admin giám sát chuyến đi thời gian thực, hỗ trợ can thiệp chuyến lỗi, phân quyền người dùng và xuất báo cáo doanh thu/tỷ lệ hoàn thành/hiệu suất tài xế. |
+
+---
+
+### 2. Quy tắc Nghiệp vụ Cốt lõi (Core Business Rules - BR)
+
+| Mã Rule | Tên Quy tắc | Nội dung Quy tắc Nghiệp vụ |
+|---|---|---|
+| **BR-01** | Điều kiện Ghép chuyến | Chỉ đề xuất chuyến đi cho tài xế đang ở trạng thái "Sẵn sàng" và có vị trí GPS trong bán kính cho phép so với điểm đón của khách hàng. |
+| **BR-02** | Bảo mật Thanh toán | Tuyệt đối **không lưu trữ** thông tin nhạy cảm của thẻ (Số thẻ, CVV, PIN) hay tài khoản ngân hàng trực tiếp trên hệ thống CAB. Chỉ lưu mã Token do Cổng thanh toán trả về. |
+| **BR-03** | Khai thác Độc lập | Lỗi từ dịch vụ Thanh toán hoặc Thông báo **không được làm gián đoạn** luồng Đặt xe và Ghép chuyến cốt lõi của hệ thống. |
+| **BR-04** | Kiểm soát Truy cập | Nhân viên vận hành chỉ được thực hiện các thao tác quản trị theo đúng phạm vi phân quyền đã được cấu hình. Mọi thao tác nhạy cảm phải ghi log kiểm vết (Audit Log). |
+
+---
+
+### 3. Danh sách Các điểm Chưa rõ Cần Xác nhận với Khách hàng (Open Questions)
+
+Do doanh nghiệp chưa chốt toàn bộ chi tiết nghiệp vụ, Business Analyst cần làm rõ các câu hỏi sau trước khi chốt thiết kế chi tiết:
+
+| STT | Vấn đề Cần Làm rõ | Đề xuất giải pháp từ BA / Lựa chọn |
+|---|---|---|
+| **1** | **Công thức Tính cước chi tiết** | - Áp dụng *Cước phí Cố định* theo khoảng cách hay *Cước phí Linh hoạt* (Giá mở cửa + Giá/km + Phụ phí giờ cao điểm/thời tiết)? |
+| **2** | **Thời gian tài xế Phản hồi (Timeout)** | - Tài xế có bao nhiêu giây (ví dụ: 15s hay 30s) để bấm nhận chuyến trước khi hệ thống chuyển sang tài xế tiếp theo? |
+| **3** | **Chính sách Hủy chuyến (Cancellation Policy)** | - Khách hàng/Tài xế có được hủy chuyến miễn phí không? Phí phạt hủy chuyến áp dụng khi nào (ví dụ: hủy sau 5 phút kể từ khi tài xế nhận chuyến)? |
+| **4** | **Xử lý Mất kết nối Mạng (Offline Handling)** | - Ứng dụng xử lý như thế nào khi tài xế bị mất kết nối 3G/4G giữa chuyến đi? Hệ thống tạm lưu dữ liệu GPS локально hay xử lý ra sao? |
+| **5** | **Thời hạn Lưu trữ Dữ liệu (Data Retention)** | - Dữ liệu lịch sử định vị GPS chi tiết của tài xế và lịch sử chuyến đi cần lưu trữ trong bao lâu (ví dụ: 6 tháng hay 1 năm) trước khi lưu trữ định danh/xóa bớt? |
+
+Bước 6: Business Process
+# BƯỚC 6: QUY TRÌNH NGHIỆP VỤ (BUSINESS PROCESS)
+
+---
+
+### 1. Luồng Quy trình Đặt xe & Thực hiện Chuyến đi (Main Business Process Flow)
+
+Quy trình nghiệp vụ cốt lõi từ lúc Khách hàng gửi yêu cầu cho đến khi Hoàn thành & Đánh giá chuyến đi:
+
+| Bước | Tác nhân (Actor) | Hành động Nghiệp vụ | Trạng thái Chuyến đi |
+|---|---|---|---|
+| **B1** | Khách hàng | Nhập điểm đón, điểm đến, lựa chọn loại xe và xác nhận gửi yêu cầu đặt xe. | `CREATED` (Đã tạo) |
+| **B2** | Hệ thống | Tự động tính cước tạm tính, xác định vị trí GPS và tìm các tài xế phù hợp đang ở trạng thái "Sẵn sàng". | `SEARCHING` (Đang tìm tài xế) |
+| **B3** | Hệ thống | Gửi thông báo mời chuyến đến tài xế ưu tiên phù hợp nhất (gần nhất). | `SEARCHING` |
+| **B4** | Tài xế | Nhận thông báo và nhấn **Chấp nhận chuyến** trong thời gian quy định (Timeout). | `ACCEPTED` (Đã nhận chuyến) |
+| **B5** | Hệ thống | Gửi thông báo xác nhận cho Khách hàng kèm thông tin tài xế, phương tiện và thời gian dự kiến đến (ETA). | `ACCEPTED` |
+| **B6** | Tài xế | Di chuyển đến điểm đón và cập nhật trạng thái khi đã tới nơi. | `ARRIVED` (Đã đến điểm đón) |
+| **B7** | Tài xế | Khách lên xe, tài xế nhấn xác nhận bắt đầu hành trình. | `IN_TRIP` (Đang di chuyển) |
+| **B8** | Khách & Tài xế | Di chuyển đến điểm đến theo bản đồ định vị. | `IN_TRIP` |
+| **B9** | Tài xế | Đến nơi, tài xế nhấn xác nhận hoàn thành chuyến đi. | `COMPLETED` (Hoàn thành) |
+| **B10**| Hệ thống | Tự động chốt tổng số tiền cước thực tế và thực hiện xử lý thanh toán (Tiền mặt hoặc Điện tử qua Cổng thanh toán). | `COMPLETED` |
+| **B11**| Khách hàng | Nhận hóa đơn điện tử/thông báo kết quả thanh toán và gửi đánh giá (sao/nhận xét) cho tài xế. | `CLOSED` (Đóng chuyến) |
+
+---
+
+### 2. Sơ đồ Tuần tự Tương tác Hệ thống (Sequence Diagram)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor C as Khách hàng
+    participant S as Hệ thống CAB
+    actor D as Tài xế
+    participant P as Cổng Thanh toán
+
+    C->>S: 1. Gửi yêu cầu đặt xe (Điểm đón/đến, Loại xe)
+    S->>S: 2. Định vị GPS & Tìm tài xế phù hợp
+    S->>D: 3. Gửi thông báo mời nhận chuyến
+    
+    alt Tài xế Chấp nhận
+        D-->>S: 4a. Bấm Chấp nhận chuyến
+        S-->>C: 5a. Thông báo tài xế đã nhận & ETA
+        D->>S: 6a. Cập nhật: Đã đến điểm đón
+        D->>S: 7a. Cập nhật: Đã đón khách (Bắt đầu)
+        D->>S: 8a. Cập nhật: Hoàn thành chuyến đi
+        
+        alt Thanh toán Điện tử
+            S->>P: 9b. Yêu cầu thanh toán tiền cước
+            P-->>S: 10b. Xác nhận giao dịch thành công
+        else Thanh toán Tiền mặt
+            C->>D: 9c. Trả tiền mặt trực tiếp
+        end
+        
+        S-->>C: 11. Gửi hóa đơn & Thông báo hoàn thành
+        C->>S: 12. Gửi đánh giá tài xế (sao/nhận xét)
+        
+    else Tài xế Từ chối / Timeout
+        D-->>S: 4b. Từ chối hoặc Không phản hồi
+        S->>S: 5b. Tự động chuyển tài xế tiếp theo
+    end
+```
+Bước 7: Phân rã yêu cầu chức năng
