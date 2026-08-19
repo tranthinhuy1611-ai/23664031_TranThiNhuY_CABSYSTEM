@@ -1,22 +1,22 @@
-Bước 1: - đọc và phân tích yêu cầu: hiểu về bussiness contesxt và bussiness problem
+#Bước 1: - đọc và phân tích yêu cầu: hiểu về bussiness contesxt và bussiness problem
         - trả lời câu hỏi: khách hàng muốn giải quyết vấn đề gì
         - vì sao k thể đáp ứng, ai sử dụng ht này,
         - giá trị sau khi tạo ra 
-Bước 2: Xác định các stackeholders (các bên liên quan trong hệ thống): 
+#Bước 2: Xác định các stackeholders (các bên liên quan trong hệ thống): 
 - Bảng danh sách: cột đầu tiên là stackeholders, cột 2 là vai trò
 - Vẽ ma trận stackeholders metric (cho biết mức độ ảnh hưởng của các vai trò )
-Bước 3: Xác định Business Goal
-Bước 4: Xác định scope (phạm vi)
-Bước 5: Thiết kế Business Requirement
-Bước 6: Business Process
-Bước 7: Phân rã yêu cầu chức năng
-Bước 8: Business rules and Exceptions (Những nguyên tắc nghiệp vụ và ngoại lệ)
-Bước 9: Mô hình hoá dữ liệu (Data modeling)
-Bước 10: Xác định Non-Functional Requirement
-Bước 11: Vẽ usecase(UC)
-Bước 12: Tạo đặc tả usecase
-Bước 13: Acceptance criteria (Tiêu chí chấp nhận AC)
-Bước 14: Truy xuất nguồn gốc yêu cầu (REQUIREMENTS TRACEABILITY MATRIX - RTM)
+#Bước 3: Xác định Business Goal
+#Bước 4: Xác định scope (phạm vi)
+#Bước 5: Thiết kế Business Requirement
+#Bước 6: Business Process
+#Bước 7: Phân rã yêu cầu chức năng
+#Bước 8: Business rules and Exceptions (Những nguyên tắc nghiệp vụ và ngoại lệ)
+#Bước 9: Mô hình hoá dữ liệu (Data modeling)
+#Bước 10: Xác định Non-Functional Requirement
+#Bước 11: Vẽ usecase(UC)
+#Bước 12: Tạo đặc tả usecase
+#Bước 13: Acceptance criteria (Tiêu chí chấp nhận AC)
+#Bước 14: Truy xuất nguồn gốc yêu cầu (REQUIREMENTS TRACEABILITY MATRIX - RTM)
 
 # BƯỚC 1: 
 1.1. Business Context
@@ -740,3 +740,52 @@ Luồng ngoại lệ
         E1: Nhân viên không có quyền → Hệ thống từ chối thao tác.
         E2: Không tìm thấy thông tin → Hệ thống thông báo dữ liệu không tồn tại.
 
+# BƯỚC 13: ACCEPTANCE CRITERIA (TIÊU CHÍ CHẤP NHẬN)
+
+| ID        | Chức năng             | Acceptance Criteria                                                                                                |
+| --------- | --------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **AC-01** | Đăng nhập             | Người dùng nhập đúng thông tin tài khoản thì đăng nhập thành công; thông tin sai thì hệ thống thông báo lỗi.       |
+| **AC-02** | Đặt xe                | Khách hàng nhập đầy đủ điểm đón, điểm đến và loại xe thì có thể tạo yêu cầu đặt xe thành công.                     |
+| **AC-03** | Tìm tài xế            | Sau khi tạo yêu cầu, hệ thống tự động tìm tài xế phù hợp dựa trên các tiêu chí đã cấu hình.                        |
+| **AC-04** | Tài xế nhận chuyến    | Khi tài xế chấp nhận, chuyến được gán cho tài xế và khách hàng nhận được thông báo.                                |
+| **AC-05** | Tài xế từ chối        | Khi tài xế từ chối hoặc không phản hồi, hệ thống tiếp tục tìm tài xế khác mà khách hàng không cần tạo lại yêu cầu. |
+| **AC-06** | Không tìm được tài xế | Khi không còn tài xế phù hợp, hệ thống thông báo rõ ràng cho khách hàng.                                           |
+| **AC-07** | Theo dõi chuyến       | Khách hàng có thể xem tài xế, trạng thái chuyến và thông tin vị trí được hệ thống cung cấp.                        |
+| **AC-08** | Cập nhật chuyến       | Tài xế có thể cập nhật các trạng thái: đã đến điểm đón, đã đón khách, đang di chuyển và hoàn thành.                |
+| **AC-09** | Tính cước             | Khi chuyến hoàn thành, hệ thống xác định và hiển thị số tiền khách hàng phải trả theo quy tắc tính cước.           |
+| **AC-10** | Thanh toán            | Khách hàng có thể thanh toán bằng tiền mặt hoặc phương thức điện tử được hỗ trợ.                                   |
+| **AC-11** | Thanh toán thất bại   | Khi thanh toán điện tử thất bại, hệ thống thông báo kết quả và cho phép xử lý lại theo chính sách doanh nghiệp.    |
+| **AC-12** | Thông báo             | Khách hàng và tài xế nhận được thông báo tương ứng khi xảy ra các sự kiện quan trọng của chuyến đi.                |
+| **AC-13** | Đánh giá              | Sau khi chuyến hoàn thành, khách hàng có thể đánh giá tài xế và hệ thống lưu kết quả đánh giá.                     |
+| **AC-14** | Quản lý vận hành      | Nhân viên vận hành có thể xem chuyến đang diễn ra, trạng thái tài xế và hỗ trợ xử lý chuyến lỗi.                   |
+| **AC-15** | Phân quyền            | Người dùng không có quyền không thể thực hiện các chức năng quản trị bị hạn chế.                                   |
+| **AC-16** | Báo cáo               | Người có quyền có thể xem báo cáo số lượng chuyến, doanh thu, tỷ lệ hoàn thành và tỷ lệ hủy.                       |
+| **AC-17** | Ghi log               | Các thao tác quan trọng được ghi nhận và có thể tra cứu khi cần kiểm tra.                                          |
+| **AC-18** | Bảo mật               | Thông tin cá nhân, dữ liệu vị trí và dữ liệu giao dịch được bảo vệ theo chính sách bảo mật của hệ thống.           |
+| **AC-19** | Khả năng chịu lỗi     | Lỗi của dịch vụ thanh toán hoặc thông báo không làm toàn bộ chức năng đặt xe ngừng hoạt động.                      |
+| **AC-20** | Lịch sử               | Khách hàng có thể xem lịch sử chuyến đi và thông tin thanh toán của các chuyến đã thực hiện.                       |
+
+
+# BƯỚC 14: REQUIREMENTS TRACEABILITY MATRIX (RTM)
+
+| Business Goal                                 | Business Requirement                    | Functional Requirement                        | Use Case                   | Acceptance Criteria |
+| --------------------------------------------- | --------------------------------------- | --------------------------------------------- | -------------------------- | ------------------- |
+| **BG-01 Nâng cao trải nghiệm khách hàng**     | **BR-01** Quản lý đặt xe                | **FR-04** Đặt xe                              | **UC-01** Đặt xe           | **AC-02**           |
+| **BG-01 Nâng cao trải nghiệm khách hàng**     | **BR-04** Theo dõi chuyến đi            | **FR-07** Theo dõi trạng thái và vị trí       | **UC-02** Thực hiện chuyến | **AC-07, AC-08**    |
+| **BG-01 Nâng cao trải nghiệm khách hàng**     | **BR-15** Đánh giá tài xế               | **FR-13** Đánh giá tài xế                     | **UC-01** Đặt xe           | **AC-13**           |
+| **BG-02 Tự động hóa tìm và phân công tài xế** | **BR-02** Tự động tìm tài xế            | **FR-05** Tìm kiếm và phân công tài xế        | **UC-01** Đặt xe           | **AC-03**           |
+| **BG-02 Tự động hóa tìm và phân công tài xế** | **BR-03** Tự động tìm tài xế thay thế   | **FR-06** Xử lý tài xế từ chối/không phản hồi | **UC-01** Đặt xe           | **AC-05, AC-06**    |
+| **BG-03 Tăng hiệu quả vận hành**              | **BR-05** Quản lý trạng thái tài xế     | **FR-08** Cập nhật trạng thái chuyến          | **UC-02** Thực hiện chuyến | **AC-08**           |
+| **BG-03 Tăng hiệu quả vận hành**              | **BR-13** Giám sát vận hành             | **FR-15** Quản lý và giám sát vận hành        | **UC-04** Quản lý vận hành | **AC-14**           |
+| **BG-04 Quản lý tập trung dữ liệu**           | **BR-11** Quản lý khách hàng            | **FR-02** Quản lý thông tin khách hàng        | **UC-04** Quản lý vận hành | **AC-14**           |
+| **BG-04 Quản lý tập trung dữ liệu**           | **BR-12** Quản lý tài xế và phương tiện | **FR-03** Quản lý tài xế và phương tiện       | **UC-04** Quản lý vận hành | **AC-14**           |
+| **BG-05 Nâng cao hiệu quả quản lý doanh thu** | **BR-07** Quản lý tính cước             | **FR-09** Tính cước chuyến đi                 | **UC-03** Thanh toán       | **AC-09**           |
+| **BG-05 Nâng cao hiệu quả quản lý doanh thu** | **BR-08** Hỗ trợ thanh toán             | **FR-10** Thanh toán                          | **UC-03** Thanh toán       | **AC-10**           |
+| **BG-05 Nâng cao hiệu quả quản lý doanh thu** | **BR-09** Quản lý giao dịch             | **FR-14** Quản lý lịch sử giao dịch           | **UC-03** Thanh toán       | **AC-11, AC-20**    |
+| **BG-06 Đảm bảo hệ thống hoạt động ổn định**  | **BR-21** Đảm bảo tính liên tục         | **FR-11** Xử lý thanh toán thất bại           | **UC-03** Thanh toán       | **AC-11, AC-19**    |
+| **BG-07 Tăng khả năng mở rộng hệ thống**      | **BR-22** Khả năng mở rộng              | **FR-20** Quản lý và cấu hình hệ thống        | —                          | **AC-19**           |
+| **BG-08 Phát triển sản phẩm trong tương lai** | **BR-23** Khả năng mở rộng nghiệp vụ    | **FR-20** Quản lý và cấu hình hệ thống        | —                          | **AC-19**           |
+| **BG-09 Đảm bảo an toàn và bảo mật dữ liệu**  | **BR-18** Phân quyền quản trị           | **FR-18** Quản lý phân quyền                  | **UC-04** Quản lý vận hành | **AC-15**           |
+| **BG-09 Đảm bảo an toàn và bảo mật dữ liệu**  | **BR-19** Bảo vệ dữ liệu                | **FR-01** Quản lý tài khoản và xác thực       | **UC-01** Đặt xe           | **AC-01, AC-18**    |
+| **BG-09 Đảm bảo an toàn và bảo mật dữ liệu**  | **BR-20** Ghi nhận hoạt động            | **FR-19** Ghi log hoạt động                   | **UC-04** Quản lý vận hành | **AC-17**           |
+| **BG-10 Cải thiện khả năng ra quyết định**    | **BR-17** Báo cáo hoạt động             | **FR-17** Báo cáo hoạt động                   | **UC-04** Quản lý vận hành | **AC-16**           |
