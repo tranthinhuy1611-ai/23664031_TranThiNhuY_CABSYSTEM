@@ -427,80 +427,82 @@ Bước 10: Xác định Non-Functional Requirement
 | **NFR-13** | **Tương thích Thiết bị** | - Ứng dụng di động hoạt động tốt trên cả 2 hệ điều hành: **Android (từ phiên bản 8.0 trở lên)** và **iOS (từ phiên bản 13.0 trở lên)**.<br>- Trang Admin tương thích tốt trên các trình duyệt hiện đại (Chrome, Safari, Edge). |
 
 Bước 11: Vẽ usecase(UC)
-# BƯỚC 11: SƠ ĐỒ VÀ DANH SÁCH USE CASE (USE CASE DIAGRAMS & LIST)
+# BƯỚC 11: SƠ ĐỒ USE CASE TỔNG QUAN (USE CASE DIAGRAM)
 
 ---
 
-### 1. Sơ đồ Use Case Tổng quan (System Overview)
+### Sơ đồ Use Case Tổng quan Hệ thống (System Use Case Diagram)
 
 ```mermaid
 graph LR
     %% Actors
-    subgraph Actors
-        Customer((Khách hàng))
-        Driver((Tài xế))
-        Operator((Nhân viên Vận hành))
-        PaymentGW[("Cổng Thanh toán")]
-        MapService[("Dịch vụ Bản đồ")]
+    C(("👤 Khách hàng"))
+    D(("🚖 Tài xế"))
+    Op(("🎧 NV Vận hành"))
+    
+    subgraph External ["Hệ thống Bên thứ 3"]
+        Map[("🌐 Map API")]
+        Pay[("💳 Payment GW")]
     end
 
     %% System Boundary
-    subgraph CAB_System ["HỆ THỐNG ĐẶT XE CAB"]
+    subgraph CAB ["HỆ THỐNG ĐẶT XE CAB"]
         
-        %% Customer Use Cases
-        subgraph Customer_UC ["Phân hệ Khách hàng"]
-            UC_RegCust("UC-01: Đăng ký / Đăng nhập")
-            UC_BookTrip("UC-02: Đặt xe mới")
-            UC_TrackTrip("UC-03: Theo dõi Chuyến đi")
-            UC_PayTrip("UC-04: Thanh toán Chuyến đi")
-            UC_ReviewTrip("UC-05: Đánh giá & Góp ý")
-            UC_TripHistory("UC-06: Xem Lịch sử Chuyến đi")
+        %% Customer Subsystem
+        subgraph Sub_Customer ["Phân hệ Khách hàng"]
+            UC01("UC-01: Đăng ký / Đăng nhập")
+            UC02("UC-02: Đặt xe mới")
+            UC03("UC-03: Theo dõi Chuyến đi")
+            UC04("UC-04: Thanh toán")
+            UC05("UC-05: Đánh giá Tài xế")
+            UC06("UC-06: Xem Lịch sử Chuyến")
         end
 
-        %% Driver Use Cases
-        subgraph Driver_UC ["Phân hệ Tài xế"]
-            UC_RegDriver("UC-07: Đăng ký Hồ sơ Tài xế")
-            UC_ToggleOnline("UC-08: Bat / Tat Trạng thái Online")
-            UC_AcceptTrip("UC-09: Nhận / Từ chối Chuyến đi")
-            UC_UpdateStatus("UC-10: Cập nhật Trạng thái Chuyến đi")
-            UC_DriverEarnings("UC-11: Xem Thu nhập")
+        %% Driver Subsystem
+        subgraph Sub_Driver ["Phân hệ Tài xế"]
+            UC07("UC-07: Đăng ký Hồ sơ Tài xế")
+            UC08("UC-08: Bật / Tắt Online")
+            UC09("UC-09: Nhận / Từ chối Chuyến")
+            UC10("UC-10: Cập nhật Trạng thái")
+            UC11("UC-11: Xem Thu nhập")
         end
 
-        %% Operator Use Cases
-        subgraph Ops_UC ["Phân hệ Quản trị & Vận hành"]
-            UC_ApproveDriver("UC-12: Duyệt Hồ sơ Tài xế")
-            UC_MonitorTrips("UC-13: Giám sát Chuyến đi Real-time")
-            UC_HandleSupport("UC-14: Xử lý Khiếu nại / Cố định Chuyến đi")
-            UC_ManageReports("UC-15: Xem Báo cáo Doanh thu & Vận hành")
+        %% Admin Subsystem
+        subgraph Sub_Admin ["Phân hệ Quản trị"]
+            UC12("UC-12: Duyệt Hồ sơ Tài xế")
+            UC13("UC-13: Giám sát Real-time")
+            UC14("UC-14: Xử lý Khiếu nại")
+            UC15("UC-15: Xem Báo cáo Quản trị")
         end
 
     end
 
-    %% Relationships - Customer
-    Customer --> UC_RegCust
-    Customer --> UC_BookTrip
-    Customer --> UC_TrackTrip
-    Customer --> UC_PayTrip
-    Customer --> UC_ReviewTrip
-    Customer --> UC_TripHistory
+    %% Customer Connections
+    C --- UC01
+    C --- UC02
+    C --- UC03
+    C --- UC04
+    C --- UC05
+    C --- UC06
 
-    %% Relationships - Driver
-    Driver --> UC_RegDriver
-    Driver --> UC_ToggleOnline
-    Driver --> UC_AcceptTrip
-    Driver --> UC_UpdateStatus
-    Driver --> UC_DriverEarnings
+    %% Driver Connections
+    D --- UC07
+    D --- UC08
+    D --- UC09
+    D --- UC10
+    D --- UC11
 
-    %% Relationships - Operator
-    Operator --> UC_ApproveDriver
-    Operator --> UC_MonitorTrips
-    Operator --> UC_HandleSupport
-    Operator --> UC_ManageReports
+    %% Operator Connections
+    Op --- UC12
+    Op --- UC13
+    Op --- UC14
+    Op --- UC15
 
-    %% External Systems Relations
-    UC_BookTrip -.->|include| MapService
-    UC_TrackTrip -.->|include| MapService
-    UC_PayTrip -.->|include| PaymentGW
+    %% External System Integrations
+    UC02 -.-> Map
+    UC03 -.-> Map
+    UC04 -.-> Pay
+    UC13 -.-> Map
 ```
 Bước 12: Tạo đặc tả usecase
 # BƯỚC 12: ĐẶC TẢ USE CASE CHI TIẾT (USE CASE SPECIFICATION)
@@ -560,3 +562,92 @@ sequenceDiagram
     Backend-->>App: Xác nhận tạo chuyến & Hiển thị màn hình "Đang tìm tài xế..."
     Backend->>D: Phát tín hiệu cuốc xe mới tới các tài xế gần nhất
 ```
+Bước 13: Acceptance criteria (Tiêu chí chấp nhận AC)
+# BƯỚC 13: TIÊU CHÍ CHẤP NHẬN (ACCEPTANCE CRITERIA - AC)
+
+---
+
+## 1. AC Cho UC-01: Đăng nhập bằng Số điện thoại & OTP
+
+### **AC-01.1: Gửi mã OTP thành công**
+* **Given (Giả sử):** Khách hàng đang ở màn hình Đăng nhập và chưa nhận mã OTP.
+* **When (Khi):** Khách hàng nhập số điện thoại hợp lệ (ví dụ: `0912345678`) và nhấn nút "Gửi mã OTP".
+* **Then (Thì):** 
+  * Hệ thống gửi mã OTP 6 chữ số qua SMS trong vòng 10 giây.
+  * Màn hình chuyển sang giao diện nhập OTP với đếm ngược thời gian (60 giây).
+  * Nút "Gửi lại mã" bị vô hiệu hóa trong thời gian đếm ngược.
+
+### **AC-01.2: Nhập sai mã OTP quá số lần quy định**
+* **Given:** Khách hàng đang ở màn hình Nhập OTP.
+* **When:** Khách hàng nhập sai mã OTP 5 lần liên tiếp.
+* **Then:**
+  * Hệ thống khóa tính năng gửi/nhập OTP của số điện thoại đó trong **15 phút**.
+  * Hiển thị thông báo lỗi: *"Bạn đã nhập sai quá 5 lần. Vui lòng thử lại sau 15 phút."*
+
+---
+
+## 2. AC Cho UC-02: Đặt xe mới (Book a Trip)
+
+### **AC-02.1: Hiển thị đúng thông tin cước và thời gian dự kiến**
+* **Given:** Khách hàng đã chọn điểm đón và điểm đến hợp lệ trên bản đồ.
+* **When:** Hệ thống tính toán xong lộ trình.
+* **Then:**
+  * Hiển thị danh sách các loại xe (Xe 4 chỗ, Xe 7 chỗ, Xe máy).
+  * Mỗi loại xe phải hiển thị đầy đủ: Giá cước ước tính (VND), Thời gian tài xế dự kiến đến đón (phút), và Khoảng cách di chuyển (km).
+
+### **AC-02.2: Áp dụng Mã giảm giá (Promo Code) thành công**
+* **Given:** Khách hàng đang ở màn hình Xác nhận đặt xe với chuyến đi có giá gốc `100.000 VND`.
+* **When:** Khách hàng nhập mã giảm giá `CAB20` (Giảm 20%, tối đa 30.000 VND) và nhấn "Áp dụng".
+* **Then:**
+  * Giá cước hiển thị cập nhật thành `80.000 VND`.
+  * Hiển thị dòng chi tiết: *"Đã giảm: -20.000 VND"*.
+
+### **AC-02.3: Xử lý Hết thời gian tìm xe (Search Timeout)**
+* **Given:** Khách hàng đã nhấn nút "Đặt xe" và hệ thống chuyển sang trạng thái `SEARCHING`.
+* **When:** Sau **60 giây** mà không có tài xế nào nhận chuyến.
+* **Then:**
+  * Trạng thái chuyến đi tự động chuyển thành `UNMATCHED`.
+  * Hiển thị Popup: *"Rất tiếc, hiện chưa tìm thấy tài xế gần bạn"* kèm 2 nút chọn: **[Thử lại]** và **[Hủy đặt xe]**.
+
+---
+
+## 3. AC Cho UC-09: Nhận / Từ chối Chuyến đi (Dành cho Tài xế)
+
+### **AC-09.1: Nhận cuộc xe thành công**
+* **Given:** Tài xế đang ở trạng thái `ONLINE` và màn hình nổ cuốc phát âm thanh thông báo.
+* **When:** Tài xế nhấn nút **"Chấp nhận"** trong vòng **15 giây**.
+* **Then:**
+  * Chuyến đi chuyển sang trạng thái `ACCEPTED`.
+  * Màn hình tài xế chuyển sang giao diện điều hướng dẫn đường tới điểm đón Khách hàng.
+  * Khách hàng nhận được thông báo: *"Tài xế [Tên] đang đến đón bạn"*.
+
+### **AC-09.2: Bỏ qua / Quá thời gian nhận chuyến (Timeout)**
+* **Given:** Màn hình phát cuốc xe mới đang hiển thị trên ứng dụng Tài xế.
+* **When:** Tài xế nhấn nút "Từ chối" HOẶC không thao tác gì sau **15 giây**.
+* **Then:**
+  * Cuốc xe tự động đóng lại trên màn hình tài xế đó.
+  * Hệ thống chuyển tín hiệu mời chuyến sang tài xế thích hợp tiếp theo trong khu vực.
+  * Ghi nhận 1 lần "Bỏ qua cuốc" vào chỉ số hiệu suất của tài xế.
+
+---
+
+## 4. AC Cho UC-04: Thanh toán Chuyến đi (Payment)
+
+### **AC-04.1: Thanh toán qua Ví / Thẻ thất bại do không đủ dư**
+* **Given:** Chuyến đi hoàn thành với số tiền `150.000 VND` và phương thức thanh toán là `Thẻ liên kết / Ví`.
+* **When:** Hệ thống tự động trừ tiền nhưng tài khoản thẻ/ví không đủ số dư.
+* **Then:**
+  * Hệ thống thông báo thanh toán thất bại cho Khách hàng.
+  * Trạng thái thanh toán của chuyến đi đổi thành `PENDING_PAYMENT`.
+  * Yêu cầu Khách hàng chuyển sang phương thức **Thanh toán Tiền mặt** hoặc chọn Thẻ khác để tiếp tục.
+
+---
+
+## 5. Bảng Tiêu chí Chấp nhận Phi chức năng (Non-Functional AC Checklist)
+
+| Mã AC | Hạng mục | Tiêu chí chấp nhận (Criteria) |
+|:---:|---|---|
+| **AC-NFR-01** | **Thao tác Real-time** | Độ trễ cập nhật vị trí GPS của Tài xế trên màn hình Khách hàng không quá **3 giây**. |
+| **AC-NFR-02** | **Hiệu năng (Performance)** | Thời gian phản hồi API tính cước và lộ trình phải nhỏ hơn **1.5 giây** trong điều kiện bình thường. |
+| **AC-NFR-03** | **An toàn bảo mật** | Tất cả thông tin thanh toán thẻ phải được mã hóa theo chuẩn **PCI-DSS**. |
+| **AC-NFR-04** | **Độ tin cậy (Reliability)** | Hệ thống gửi thông báo Push Notification tìm xe đạt tỷ lệ thành công tối thiểu **99%**. |
