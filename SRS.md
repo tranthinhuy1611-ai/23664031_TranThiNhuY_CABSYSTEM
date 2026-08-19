@@ -110,29 +110,25 @@ Bước 3: Xác định Business Goal
 
 ---
 
-### 1. Mục tiêu Tổng quát (Strategic Vision)
+### Mục tiêu Tổng quát (Strategic Vision)
 
 Xây dựng và triển khai thành công nền tảng **CAB System** trong vòng **7 tuần**, chuyển đổi từ mô hình vận hành thủ công sang hệ thống đặt xe tự động hóa hoàn toàn. Hệ thống mới đảm bảo khả năng mở rộng linh hoạt, hoạt động ổn định ở tải cao, bảo mật dữ liệu giao dịch và tạo tiền đề để doanh nghiệp phát triển thêm các dịch vụ mới trong tương lai.
 
 ---
 
-### 2. Bảng Mục tiêu Kinh doanh theo Tiêu chí SMART
+### Danh sách Mục tiêu Kinh doanh
 
-| Mã Goal | Mục tiêu Kinh doanh (Business Goal) | Chỉ số đo lường (Metric / KPI) | Thời hạn (Timeline) |
-|---|---|---|---|
-| **BG-01** | **Tự động hóa & Tối ưu vận hành**<br>Giảm thiểu tối đa việc phân công tài xế thủ công, chuyển sang tự động ghép chuyến dựa trên vị trí GPS. | Tự động hóa ≥ 95% tổng số chuyến đi thành công mà không cần nhân viên vận hành can thiệp. | Ngay khi Go-Live |
-| **BG-02** | **Nâng cao Trải nghiệm Khách hàng**<br>Cung cấp khả năng theo dõi tiến trình chuyến đi thời gian thực (real-time tracking) và minh bạch cước phí. | - Tỷ lệ hủy chuyến giảm 20%<br>- Điểm đánh giá trải nghiệm trung bình (CSAT) ≥ 4.5/5 sao. | Trong 3 tháng sau Go-Live |
-| **BG-03** | **Đảm bảo Độ tin cậy & Khả năng Mở rộng**<br>Hệ thống hoạt động liên tục vào giờ cao điểm, các module độc lập không làm gián đoạn luồng đặt xe cốt lõi. | - Uptime hệ thống đạt ≥ 99.5%<br>- Xử lý thành công khi lưu lượng chuyến đi tăng 300% giờ cao điểm. | Trong 6 tháng sau Go-Live |
-| **BG-04** | **Bảo mật & Tuân thủ Tài chính**<br>Xử lý thanh toán điện tử an toàn qua nhà cung cấp bên ngoài, tuyệt đối không lưu dữ liệu thẻ/tài khoản ngân hàng nhạy cảm. | 0 sự cố lộ gián tiếp dữ liệu thanh toán hoặc vi phạm tiêu chuẩn bảo mật. | Liên tục từ khi Go-Live |
-| **BG-05** | **Tối ưu Thời gian Đợi chuyến (Match Time)**<br>Giảm thời gian hệ thống định vị và ghép chuyến thành công cho khách hàng. | Thời gian tìm và phản hồi ghép chuyến trung bình ≤ 30 giây/yêu cầu. | Ngay khi Go-Live |
+| STT | Mục tiêu Kinh doanh | Mô tả chi tiết |
+|---|---|---|
+| **1** | **Tự động hóa vận hành** | Tự động ghép chuyến cho tài xế và khách hàng dựa trên vị trí GPS, giảm 95% sự can thiệp thủ công từ tổng đài. |
+| **2** | **Rút ngắn thời gian chờ xe** | Giảm thời gian tìm và kết nối tài xế xuống dưới 30 giây cho mỗi yêu cầu đặt xe. |
+| **3** | **Minh bạch thông tin chuyến đi** | Giúp khách hàng nắm rõ vị trí tài xế, thời gian xe đến, giá cước và lịch sử chuyến đi theo thời gian thực. |
+| **4** | **Đảm bảo hệ thống chạy liên tục** | Giữ cho hệ thống luôn hoạt động ổn định (đạt 99.5% uptime), không bị sập toàn bộ kể cả khi giao dịch tăng cao vào giờ cao điểm. |
+| **5** | **An toàn thanh toán & Bảo mật** | Tích hợp thanh toán qua cổng thanh toán uy tín, bảo mật thông tin tài khoản và không lưu dữ liệu thẻ ngân hàng của khách hàng. |
+| **6** | **Dễ dàng mở rộng tương lai** | Xây dựng kiến trúc linh hoạt để sau này có thể thêm loại dịch vụ mới (giao hàng, đi chung), thêm phương thức thanh toán mà không phải làm lại hệ thống. |
+
 
 ---
 
-### 3. Mối liên hệ giữa Vấn đề Nghiệp vụ và Mục tiêu Kinh doanh
 
-| Vấn đề hiện tại (Business Problem) | Giải pháp Hệ thống CAB mới | Mục tiêu Kinh doanh Đạt được |
-|---|---|---|
-| Phân công tài xế thủ công, tốn nhân lực và khó tăng quy mô. | Thuật toán ghép chuyến tự động dựa trên vị trí GPS và trạng thái sẵn sàng của tài xế. | **BG-01, BG-05** |
-| Khách hàng không biết trạng thái xe, thời gian chờ và thông tin tài xế. | Luồng hiển thị thông tin thời gian thực, thông báo đa kênh và xem lịch sử chuyến đi. | **BG-02** |
-| Hệ thống dễ sập toàn bộ khi một chức năng lỗi, không thể mở rộng. | Thiết kế kiến trúc dạng module (Loosely coupled), các thành phần mở rộng độc lập. | **BG-03** |
-| Quản lý thanh toán phân tán, rủi ro an toàn thông tin thẻ. | Tích hợp Cổng thanh toán bên ngoài (Payment Gateway) qua giao thức Tokenization an toàn. | **BG-04** |
+Bước 4: Xác định scope (phạm vi)
