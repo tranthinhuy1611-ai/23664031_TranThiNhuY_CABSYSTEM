@@ -268,56 +268,28 @@ Do doanh nghiệp chưa chốt toàn bộ chi tiết nghiệp vụ, Business Ana
 
 Bước 6: Business Process
 # BƯỚC 6: BUSINESS PROCESS
-┌─────────────┐
-│  KHÁCH HÀNG │
-└──────┬──────┘
-       │
-       │ 1. Đặt xe
-       ▼
-┌──────────────────┐
-│ Tiếp nhận yêu cầu│
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│   Tìm tài xế     │
-└────────┬─────────┘
-         │
-         ▼
-    ┌────────────┐
-    │ Tài xế     │
-    │ nhận chuyến│
-    └─────┬──────┘
-       Có │   │ Không
-          │   └──────────────┐
-          │                  ▼
-          │            Tìm tài xế khác
-          │
-          ▼
-┌──────────────────┐
-│  Thực hiện chuyến│
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│ Hoàn thành chuyến│
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│    Tính cước     │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│    Thanh toán    │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Đánh giá tài xế │
-└──────────────────┘
 
+```mermaid
+flowchart TD
+
+    A["KHÁCH HÀNG"] --> B["1. Đặt xe"]
+    B --> C["Tiếp nhận yêu cầu"]
+    C --> D["Tìm tài xế"]
+
+    D --> E{"Tài xế nhận chuyến?"}
+
+    E -->|Có| F["Thực hiện chuyến"]
+    E -->|Không / Không phản hồi| G["Tìm tài xế khác"]
+    G --> D
+
+    F --> H["Hoàn thành chuyến"]
+    H --> I["Tính cước"]
+    I --> J["Thanh toán"]
+    J --> K["Đánh giá tài xế"]
+
+    D --> L{"Có tài xế phù hợp?"}
+    L -->|Không| M["Thông báo khách hàng"]
+```
 Các tác nhân tham gia
 
 Khách hàng → CAB System → Tài xế → Nhân viên vận hành → Nhà cung cấp thanh toán/Thông báo
