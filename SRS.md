@@ -1,22 +1,25 @@
-#Bước 1: - đọc và phân tích yêu cầu: hiểu về bussiness contesxt và bussiness problem
+## CÁC BƯỚC CẦN THỰC HIỆN
+# Bước 1: - đọc và phân tích yêu cầu: hiểu về bussiness contesxt và bussiness problem
         - trả lời câu hỏi: khách hàng muốn giải quyết vấn đề gì
         - vì sao k thể đáp ứng, ai sử dụng ht này,
         - giá trị sau khi tạo ra 
-#Bước 2: Xác định các stackeholders (các bên liên quan trong hệ thống): 
+# Bước 2: Xác định các stackeholders (các bên liên quan trong hệ thống): 
 - Bảng danh sách: cột đầu tiên là stackeholders, cột 2 là vai trò
 - Vẽ ma trận stackeholders metric (cho biết mức độ ảnh hưởng của các vai trò )
-#Bước 3: Xác định Business Goal
-#Bước 4: Xác định scope (phạm vi)
-#Bước 5: Thiết kế Business Requirement
-#Bước 6: Business Process
-#Bước 7: Phân rã yêu cầu chức năng
-#Bước 8: Business rules and Exceptions (Những nguyên tắc nghiệp vụ và ngoại lệ)
-#Bước 9: Mô hình hoá dữ liệu (Data modeling)
-#Bước 10: Xác định Non-Functional Requirement
-#Bước 11: Vẽ usecase(UC)
-#Bước 12: Tạo đặc tả usecase
-#Bước 13: Acceptance criteria (Tiêu chí chấp nhận AC)
-#Bước 14: Truy xuất nguồn gốc yêu cầu (REQUIREMENTS TRACEABILITY MATRIX - RTM)
+# Bước 3: Xác định Business Goal
+# Bước 4: Xác định scope (phạm vi)
+# Bước 5: Thiết kế Business Requirement
+# Bước 6: Business Process
+# Bước 7: Phân rã yêu cầu chức năng
+# Bước 8: Business rules and Exceptions (Những nguyên tắc nghiệp vụ và ngoại lệ)
+# Bước 9: Mô hình hoá dữ liệu (Data modeling)
+# Bước 10: Xác định Non-Functional Requirement
+# Bước 11: Vẽ usecase(UC)
+# Bước 12: Tạo đặc tả usecase
+# Bước 13: Acceptance criteria (Tiêu chí chấp nhận AC)
+# Bước 14: Truy xuất nguồn gốc yêu cầu (REQUIREMENTS TRACEABILITY MATRIX - RTM)
+
+
 
 # BƯỚC 1: 
 1.1. Business Context
