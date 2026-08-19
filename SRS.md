@@ -1,7 +1,8 @@
-Bước 1: - đọc và phân tích yêu cầu: hiểuu về bussiness contesxt và bussiness problem
+Bước 1: - đọc và phân tích yêu cầu: hiểu về bussiness contesxt và bussiness problem
         - trả lời câu hỏi: khách hàng muốn giải quyết vấn đề gì
         - vì sao k thể đáp ứng, ai sử dụng ht này,
         - giá trị sau khi tạo ra 
+# BƯỚC 1: 
 1. Bối cảnh Nghiệp vụ (Business Context)
 
 Công ty ABC là doanh nghiệp cung cấp dịch vụ đặt xe trực tuyến đang phục vụ khách hàng qua hai kênh: tổng đài và một ứng dụng di động đơn giản. Doanh nghiệp đang đối mặt với sự gia tăng về quy mô nhưng hạ tầng vận hành hiện tại đã chạm ngưỡng giới hạn.
