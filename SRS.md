@@ -266,3 +266,29 @@ sequenceDiagram
     end
 ```
 Bước 7: Phân rã yêu cầu chức năng
+# BƯỚC 7: PHÂN RÃ YÊU CẦU CHỨC NĂNG (FUNCTIONAL REQUIREMENTS DECOMPOSITION)
+
+---
+
+### 1. Sơ đồ Phân rã Chức năng Tổng quan (Functional Decomposition Tree)
+
+```mermaid
+graph TD
+    SYS[Hệ thống CAB System] --> M1[F-01: Quản lý Tài khoản & Hồ sơ]
+    SYS --> M2[F-02: Quản lý Đặt xe & Điều phối]
+    SYS --> M3[F-03: Thực hiện & Theo dõi Chuyến đi]
+    SYS --> M4[F-04: Tính cước & Thanh toán]
+    SYS --> M5[F-05: Hệ thống Thông báo]
+    SYS --> M6[F-06: Đánh giá & Lịch sử]
+    SYS --> M7[F-07: Quản trị Admin & Báo cáo]
+
+    M2 --> F21[F-02.1: Tạo yêu cầu đặt xe]
+    M2 --> F22[F-02.2: Định vị GPS tài xế]
+    M2 --> F23[F-02.3: Thuật toán ghép chuyến]
+    M2 --> F24[F-02.4: Xử lý Timeout/Từ chối]
+
+    M4 --> F41[F-04.1: Tính cước tự động]
+    M4 --> F42[F-04.2: Thanh toán Tiền mặt]
+    M4 --> F43[F-04.3: Thanh toán Cổng điện tử]
+    M4 --> F44[F-04.4: Xử lý giao dịch lỗi]
+```
