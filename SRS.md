@@ -205,67 +205,51 @@ Do doanh nghiệp chưa chốt toàn bộ chi tiết nghiệp vụ, Business Ana
 | **5** | **Thời hạn Lưu trữ Dữ liệu (Data Retention)** | - Dữ liệu lịch sử định vị GPS chi tiết của tài xế và lịch sử chuyến đi cần lưu trữ trong bao lâu (ví dụ: 6 tháng hay 1 năm) trước khi lưu trữ định danh/xóa bớt? |
 
 Bước 6: Business Process
-# BƯỚC 6: QUY TRÌNH NGHIỆP VỤ (BUSINESS PROCESS)
+# BƯỚC 7: PHÂN RÃ YÊU CẦU CHỨC NĂNG (FUNCTIONAL REQUIREMENTS DECOMPOSITION)
 
 ---
 
-### 1. Luồng Quy trình Đặt xe & Thực hiện Chuyến đi (Main Business Process Flow)
+### 1. Danh sách Phân rã Chức năng Chi tiết (Detailed Requirements Breakdown)
 
-Quy trình nghiệp vụ cốt lõi từ lúc Khách hàng gửi yêu cầu cho đến khi Hoàn thành & Đánh giá chuyến đi:
-
-| Bước | Tác nhân (Actor) | Hành động Nghiệp vụ | Trạng thái Chuyến đi |
+| Mã Module | Mã Chức năng | Chức năng Cấp cao (Epic/Feature) | Yêu cầu Chức năng Chi tiết (Sub-function / User Story) |
 |---|---|---|---|
-| **B1** | Khách hàng | Nhập điểm đón, điểm đến, lựa chọn loại xe và xác nhận gửi yêu cầu đặt xe. | `CREATED` (Đã tạo) |
-| **B2** | Hệ thống | Tự động tính cước tạm tính, xác định vị trí GPS và tìm các tài xế phù hợp đang ở trạng thái "Sẵn sàng". | `SEARCHING` (Đang tìm tài xế) |
-| **B3** | Hệ thống | Gửi thông báo mời chuyến đến tài xế ưu tiên phù hợp nhất (gần nhất). | `SEARCHING` |
-| **B4** | Tài xế | Nhận thông báo và nhấn **Chấp nhận chuyến** trong thời gian quy định (Timeout). | `ACCEPTED` (Đã nhận chuyến) |
-| **B5** | Hệ thống | Gửi thông báo xác nhận cho Khách hàng kèm thông tin tài xế, phương tiện và thời gian dự kiến đến (ETA). | `ACCEPTED` |
-| **B6** | Tài xế | Di chuyển đến điểm đón và cập nhật trạng thái khi đã tới nơi. | `ARRIVED` (Đã đến điểm đón) |
-| **B7** | Tài xế | Khách lên xe, tài xế nhấn xác nhận bắt đầu hành trình. | `IN_TRIP` (Đang di chuyển) |
-| **B8** | Khách & Tài xế | Di chuyển đến điểm đến theo bản đồ định vị. | `IN_TRIP` |
-| **B9** | Tài xế | Đến nơi, tài xế nhấn xác nhận hoàn thành chuyến đi. | `COMPLETED` (Hoàn thành) |
-| **B10**| Hệ thống | Tự động chốt tổng số tiền cước thực tế và thực hiện xử lý thanh toán (Tiền mặt hoặc Điện tử qua Cổng thanh toán). | `COMPLETED` |
-| **B11**| Khách hàng | Nhận hóa đơn điện tử/thông báo kết quả thanh toán và gửi đánh giá (sao/nhận xét) cho tài xế. | `CLOSED` (Đóng chuyến) |
+| **F-01** | **F-01.1** | Quản lý Tài khoản Khách hàng | - Đăng ký tài khoản mới bằng Số điện thoại/Email.<br>- Đăng nhập / Đăng xuất hệ thống.<br>- Cập nhật thông tin cá nhân (Họ tên, Avatar, Email). |
+| | **F-01.2** | Quản lý Tài khoản & Hồ sơ Tài xế | - Đăng ký/Tạo tài khoản tài xế.<br>- Cập nhật hồ sơ cá nhân, Bằng lái xe, Giấy tờ xe.<br>- Cập nhật thông tin phương tiện (Biển số, Loại xe, Màu xe).<br>- Chuyển đổi trạng thái hoạt động (*Sẵn sàng nhận chuyến / Tạm ngưng*). |
+| | **F-01.3** | Quản lý Người dùng Admin | - Quản lý danh sách nhân viên vận hành.<br>- Cấu hình phân quyền truy cập theo vai trò (Role-based Access Control). |
+| **F-02** | **F-02.1** | Yêu cầu Đặt xe | - Khách chọn Điểm đón, Điểm đến trên bản đồ hoặc nhập địa chỉ.<br>- Khách chọn Loại dịch vụ / Loại xe (Xe 4 chỗ, Xe 7 chỗ,...).<br>- Xem cước phí dự kiến và khoảng cách/thời gian di chuyển dự kiến. |
+| | **F-02.2** | Quản lý Định vị & GPS | - Thu thập tọa độ GPS của tài xế theo chu kỳ định sẵn.<br>- Cập nhật vị trí tài xế thực tế lên bản đồ hệ thống. |
+| **F-02** | **F-02.3** | Thuật toán Ghép chuyến | - Lọc danh sách tài xế ở trạng thái "Sẵn sàng" trong bán kính quét.<br>- Tính toán khoảng cách và ưu tiên tài xế phù hợp nhất (gần nhất).<br>- Gửi thông báo mời nhận chuyến đến tài xế được chọn. |
+| | **F-02.4** | Xử lý Vòng lặp Tìm xe | - Cho phép tài xế Bấm Chấp nhận hoặc Từ chối chuyến đi.<br>- Đếm ngược thời gian phản hồi (Timeout counter).<br>- Tự động chuyển yêu cầu sang tài xế tiếp theo nếu tài xế trước Từ chối/Timeout.<br>- Thông báo lỗi cho Khách hàng khi đã quét hết tài xế mà không có người nhận. |
+| **F-03** | **F-03.1** | Cập nhật Tiến trình Chuyến đi | - Tài xế bấm *"Đã đến điểm đón"*.<br>- Tài xế bấm *"Đã đón khách"* (Bắt đầu di chuyển).<br>- Tài xế bấm *"Hoàn thành chuyến đi"* khi tới điểm đến. |
+| | **F-03.2** | Theo dõi Hành trình Thời gian thực | - Khách hàng xem vị trí tài xế đang di chuyển tới điểm đón trên bản đồ.<br>- Khách hàng xem vị trí xe trên lộ trình di chuyển thực tế. |
+| **F-04** | **F-04.1** | Tính cước Chuyến đi | - Tự động tính cước chốt sổ dựa trên quãng đường thực tế và bảng giá dịch vụ.<br>- Áp dụng các phụ phí/thuế nếu có theo cấu hình nghiệp vụ. |
+| | **F-04.2** | Xử lý Thanh toán | - Xử lý xác nhận thanh toán bằng Tiền mặt trực tiếp cho tài xế.<br>- Tích hợp API Cổng thanh toán điện tử (Payment Gateway) bên ngoài.<br>- Gửi thông tin giao dịch an toàn dạng Tokenization (không lưu dữ liệu thẻ). |
+| | **F-04.3** | Xử lý Ngoại lệ Thanh toán | - Ghi nhận trạng thái Giao dịch Thất bại.<br>- Gửi thông báo lỗi cho khách hàng và gợi ý chọn lại phương thức (Tiền mặt/Thử lại thanh toán điện tử). |
+| **F-05** | **F-05.1** | Thông báo Khách hàng | - Gửi Push Notification / SMS khi: *Yêu cầu được tiếp nhận, Có tài xế nhận chuyến, Tài xế đã đến, Chuyến đi hoàn thành, Kết quả thanh toán*. |
+| | **F-05.2** | Thông báo Tài xế | - Gửi Push Notification khi: *Có chuyến đi mới cần nhận, Khách hàng hủy chuyến, Thay đổi thông tin chuyến đi*. |
+| **F-06** | **F-06.1** | Tra cứu Lịch sử | - Khách hàng tra cứu danh sách các chuyến đi đã thực hiện, chi tiết cước phí và hóa đơn.<br>- Tài xế xem lịch sử các chuyến đã chạy và tổng thu nhập theo ngày/thần suất. |
+| | **F-06.2** | Đánh giá & Phản hồi | - Khách hàng chấm điểm Tài xế (1 - 5 sao).<br>- Khách hàng nhập nội dung đánh giá / góp ý về chuyến đi. |
+| **F-07** | **F-07.1** | Giám sát & Điều hành (Live Dashboard) | - Xem danh sách chuyến đi đang diễn ra trên hệ thống theo thời gian thực.<br>- Kiểm tra vị trí và trạng thái hoạt động của từng tài xế trên bản đồ Admin. |
+| | **F-07.2** | Hỗ trợ & Can thiệp Sự cố | - Tra cứu thông tin chi tiết chuyến đi khi có khiếu nại.<br>- Hỗ trợ hủy chuyến hoặc điều chỉnh thông tin trong các trường hợp sự cố đặc biệt. |
+| | **F-07.3** | Báo cáo Thống kê (Analytics) | - Báo cáo tổng số lượng chuyến đi (Thành công, Hủy, Không tìm thấy xe).<br>- Báo cáo tổng doanh thu theo ngày/tần suất/loại dịch vụ.<br>- Báo cáo tỷ lệ hoàn thành chuyến và chỉ số hiệu quả (KPIs) của tài xế. |
 
 ---
 
-### 2. Sơ đồ Tuần tự Tương tác Hệ thống (Sequence Diagram)
+### 2. Ma trận Phụ thuộc giữa các Chức năng (Dependency Matrix)
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor C as Khách hàng
-    participant S as Hệ thống CAB
-    actor D as Tài xế
-    participant P as Cổng Thanh toán
+Bảng này mô tả mối liên hệ và thứ tự ưu tiên phụ thuộc giữa các phân rã chức năng để hỗ trợ Lập trình viên triển khai theo tiến độ:
 
-    C->>S: 1. Gửi yêu cầu đặt xe (Điểm đón/đến, Loại xe)
-    S->>S: 2. Định vị GPS & Tìm tài xế phù hợp
-    S->>D: 3. Gửi thông báo mời nhận chuyến
-    
-    alt Tài xế Chấp nhận
-        D-->>S: 4a. Bấm Chấp nhận chuyến
-        S-->>C: 5a. Thông báo tài xế đã nhận & ETA
-        D->>S: 6a. Cập nhật: Đã đến điểm đón
-        D->>S: 7a. Cập nhật: Đã đón khách (Bắt đầu)
-        D->>S: 8a. Cập nhật: Hoàn thành chuyến đi
-        
-        alt Thanh toán Điện tử
-            S->>P: 9b. Yêu cầu thanh toán tiền cước
-            P-->>S: 10b. Xác nhận giao dịch thành công
-        else Thanh toán Tiền mặt
-            C->>D: 9c. Trả tiền mặt trực tiếp
-        end
-        
-        S-->>C: 11. Gửi hóa đơn & Thông báo hoàn thành
-        C->>S: 12. Gửi đánh giá tài xế (sao/nhận xét)
-        
-    else Tài xế Từ chối / Timeout
-        D-->>S: 4b. Từ chối hoặc Không phản hồi
-        S->>S: 5b. Tự động chuyển tài xế tiếp theo
-    end
-```
-Bước 7: Phân rã yêu cầu chức năng
+| Chức năng (Feature) | Chức năng Phụ thuộc (Prerequisite Features) | Lý do Phụ thuộc |
+|---|---|---|
+| **F-02.1 (Đặt xe)** | F-01.1 (Tài khoản Khách) | Phải đăng nhập tài khoản trước khi tạo đơn đặt xe. |
+| **F-02.3 (Ghép chuyến)** | F-02.2 (Định vị GPS), F-01.2 (Hồ sơ Tài xế) | Cần có dữ liệu vị trí GPS và trạng thái "Sẵn sàng" của tài xế để thuật toán ghép chuyến quét dữ liệu. |
+| **F-03.1 (Cập nhật Tiến trình)** | F-02.4 (Chấp nhận chuyến) | Tài xế phải nhận chuyến thành công trước khi có thể cập nhật các trạng thái chuyến đi. |
+| **F-04.1 (Tính cước)** | F-03.1 (Hoàn thành chuyến) | Cần có tín hiệu hoàn thành chuyến đi để chốt quãng đường và tính cước thực tế. |
+| **F-04.2 (Thanh toán)** | F-04.1 (Tính cước) | Phải có số tiền cước chính xác trước khi gửi yêu cầu trừ tiền qua Cổng thanh toán. |
+| **F-06.2 (Đánh giá)** | F-04.2 (Thanh toán xong) | Khách hàng chỉ đánh giá tài xế sau khi hoàn tất chuyến đi và thanh toán thành công. |
+
+
+Bước 7: Phân rã yêu cầu chức năng (Functional Requirement decomposition)
 # BƯỚC 7: PHÂN RÃ YÊU CẦU CHỨC NĂNG (FUNCTIONAL REQUIREMENTS DECOMPOSITION)
 
 ---
