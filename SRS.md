@@ -111,9 +111,6 @@ Việc xây dựng CAB System mang lại giá trị cho cả khách hàng và do
 
 CAB System không chỉ giải quyết bài toán "đặt xe" mà hướng đến việc xây dựng một nền tảng quản lý toàn bộ vòng đời của một chuyến xe
 
-Bước 2: Xác định các stackeholders (các bên liên quan trong hệ thống): 
-- Bảng danh sách: cột đầu tiên là stackeholders, cột 2 là vai trò
-- Vẽ ma trận stackeholders metric (cho biết mức độ ảnh hưởng của các vai trò )
 
 # BƯỚC 2: XÁC ĐỊNH VÀ PHÂN TÍCH CÁC BÊN LIÊN QUAN (STAKEHOLDERS)
 
@@ -165,7 +162,7 @@ Bước 2: Xác định các stackeholders (các bên liên quan trong hệ th�
 
 ```
 
-Bước 3: Xác định Business Goal
+
 # BƯỚC 3: XÁC ĐỊNH MỤC TIÊU KINH DOANH (BUSINESS GOALS)
 
 ---
@@ -193,7 +190,7 @@ Xây dựng và triển khai thành công nền tảng **CAB System** trong vòn
 
 
 
-Bước 4: Xác định scope (phạm vi)
+
 # BƯỚC 4: XÁC ĐỊNH PHẠM VI DỰ ÁN (PROJECT SCOPE)
 
 ### 1. Phạm vi Thực hiện Dự án (In-Scope - 7 Tuần)
@@ -219,7 +216,7 @@ Nhằm đảm bảo mục tiêu **triển khai thành công trong 7 tuần**, h�
 - **Mở rộng kênh thông báo:** Thêm nhà cung cấp dịch vụ SMS/OTT mới để tối ưu chi phí vận hành.
 - **Nâng cấp thuật toán ghép chuyến:** Cấu hình linh hoạt các tiêu chí ưu tiên tài xế và điều chỉnh thời gian phản hồi theo thời điểm.
 
-Bước 5: Thiết kế Business Requirement
+
 # BƯỚC 5: THIẾT KẾ YÊU CẦU NGHIỆP VỤ CHI TIẾT (BUSINESS REQUIREMENTS)
 
 ---
@@ -266,7 +263,6 @@ Do doanh nghiệp chưa chốt toàn bộ chi tiết nghiệp vụ, Business Ana
 | **4** | **Xử lý Mất kết nối Mạng (Offline Handling)** | - Ứng dụng xử lý như thế nào khi tài xế bị mất kết nối 3G/4G giữa chuyến đi? Hệ thống tạm lưu dữ liệu GPS локально hay xử lý ra sao? |
 | **5** | **Thời hạn Lưu trữ Dữ liệu (Data Retention)** | - Dữ liệu lịch sử định vị GPS chi tiết của tài xế và lịch sử chuyến đi cần lưu trữ trong bao lâu (ví dụ: 6 tháng hay 1 năm) trước khi lưu trữ định danh/xóa bớt? |
 
-Bước 6: Business Process
 # BƯỚC 6: BUSINESS PROCESS
 
 ```mermaid
@@ -348,7 +344,6 @@ Bảng này mô tả mối liên hệ và thứ tự ưu tiên phụ thuộc gi�
 | **F-06.2 (Đánh giá)** | F-04.2 (Thanh toán xong) | Khách hàng chỉ đánh giá tài xế sau khi hoàn tất chuyến đi và thanh toán thành công. |
 
 
-Bước 8: Business rules and Exceptions (Những nguyên tắc nghiệp vụ và ngoại lệ)
 # BƯỚC 8: NGUYÊN TẮC NGHIỆP VỤ VÀ XỬ LÝ NGOẠI LỆ (BUSINESS RULES & EXCEPTIONS)
 
 ---
@@ -394,7 +389,6 @@ Bước 8: Business rules and Exceptions (Những nguyên tắc nghiệp vụ v�
 ---
 
 
-Bước 9: Mô hình hoá dữ liệu (Data modeling)
 # BƯỚC 9: MÔ HÌNH HÓA DỮ LIỆU (DATA MODELING)
 # 9.1. Các thực thể chính
 
@@ -563,81 +557,186 @@ Bước 10: Xác định Non-Functional Requirement
 | **NFR-15** | Tính dễ sử dụng            | Giao diện phải dễ hiểu, thuận tiện cho khách hàng, tài xế và nhân viên vận hành.                                               |
 
 
-Bước 11: Vẽ usecase(UC)
 
 # BƯỚC 11: SƠ ĐỒ USE CASE TỔNG QUAN (USE CASE DIAGRAM)
+
+```mermaid
 flowchart LR
 
-    KH["👤 Khách hàng"]
-    TX["🚗 Tài xế"]
-    NV["👨‍💼 Nhân viên vận hành"]
-    QT["🔐 Quản trị viên"]
-    PAY["💳 Nhà cung cấp thanh toán"]
+    KH((Khách hàng))
+    TX((Tài xế))
+    NV((Nhân viên vận hành))
+    QT((Quản trị viên))
+    TT((Nhà cung cấp thanh toán))
 
     subgraph CAB["CAB SYSTEM"]
-        UC1(["Đăng ký / Đăng nhập"])
-        UC2(["Quản lý thông tin cá nhân"])
 
-        UC3(["Đặt xe"])
-        UC4(["Theo dõi chuyến đi"])
-        UC5(["Xem lịch sử chuyến"])
-        UC6(["Đánh giá tài xế"])
+        UC01(["Đăng ký / Đăng nhập"])
+        UC02(["Cập nhật thông tin cá nhân"])
+        UC03(["Đặt xe"])
+        UC04(["Theo dõi chuyến đi"])
+        UC05(["Xem lịch sử chuyến"])
+        UC06(["Đánh giá tài xế"])
 
-        UC7(["Quản lý trạng thái tài xế"])
-        UC8(["Nhận / Từ chối chuyến"])
-        UC9(["Cập nhật trạng thái chuyến"])
+        UC07(["Cập nhật trạng thái"])
+        UC08(["Nhận chuyến"])
+        UC09(["Từ chối chuyến"])
         UC10(["Cập nhật vị trí"])
 
-        UC11(["Tìm & Phân công tài xế"])
-        UC12(["Tính cước"])
-        UC13(["Thanh toán"])
-        UC14(["Gửi thông báo"])
+        UC11(["Tìm tài xế"])
+        UC12(["Phân công tài xế"])
+        UC13(["Tính cước"])
+        UC14(["Thanh toán"])
+        UC15(["Gửi thông báo"])
 
-        UC15(["Quản lý khách hàng"])
-        UC16(["Quản lý tài xế & phương tiện"])
-        UC17(["Giám sát chuyến đi"])
-        UC18(["Xử lý sự cố"])
-        UC19(["Tra cứu giao dịch"])
+        UC16(["Quản lý khách hàng"])
+        UC17(["Quản lý tài xế"])
+        UC18(["Quản lý phương tiện"])
+        UC19(["Giám sát chuyến đi"])
+        UC20(["Xử lý sự cố"])
+        UC21(["Tra cứu giao dịch"])
 
-        UC20(["Báo cáo"])
-        UC21(["Phân quyền"])
-        UC22(["Ghi log hoạt động"])
+        UC22(["Báo cáo"])
+        UC23(["Phân quyền"])
+        UC24(["Ghi log hoạt động"])
     end
 
-    KH --- UC1
-    KH --- UC2
-    KH --- UC3
-    KH --- UC4
-    KH --- UC5
-    KH --- UC6
-    KH --- UC13
+    KH --- UC01
+    KH --- UC02
+    KH --- UC03
+    KH --- UC04
+    KH --- UC05
+    KH --- UC06
+    KH --- UC14
 
-    TX --- UC1
-    TX --- UC2
-    TX --- UC7
-    TX --- UC8
-    TX --- UC9
+    TX --- UC01
+    TX --- UC02
+    TX --- UC07
+    TX --- UC08
+    TX --- UC09
     TX --- UC10
 
-    NV --- UC15
     NV --- UC16
     NV --- UC17
     NV --- UC18
     NV --- UC19
     NV --- UC20
+    NV --- UC21
+    NV --- UC22
 
-    QT --- UC21
-    QT --- UC22
+    QT --- UC23
+    QT --- UC24
 
-    PAY --- UC13
+    TT --- UC14
 
-    UC3 -.->|include| UC11
-    UC3 -.->|include| UC14
-    UC8 -.->|include| UC14
-    UC9 -.->|include| UC14
-    UC12 -.->|include| UC13
-
-Bước 12: Tạo đặc tả usecase
+    UC03 -.->|include| UC11
+    UC11 -.->|include| UC12
+    UC03 -.->|include| UC15
+    UC08 -.->|include| UC15
+    UC14 -.->|include| UC13
+```
 # BƯỚC 12: ĐẶC TẢ USE CASE CHI TIẾT (USE CASE SPECIFICATION)
 
+UC-01: Đặt xe
+
+| Thành phần         | Nội dung                                                                               |
+| ------------------ | -------------------------------------------------------------------------------------- |
+| **Use Case ID**    | UC-01                                                                                  |
+| **Tên Use Case**   | Đặt xe                                                                                 |
+| **Actor chính**    | Khách hàng                                                                             |
+| **Actor phụ**      | Tài xế                                                                                 |
+| **Mục tiêu**       | Khách hàng tạo yêu cầu đặt xe và được hệ thống tìm tài xế phù hợp.                     |
+| **Tiền điều kiện** | Khách hàng đã đăng nhập.                                                               |
+| **Hậu điều kiện**  | Chuyến được phân công cho tài xế hoặc khách hàng nhận thông báo không tìm được tài xế. |
+
+Luồng chính
+        Khách hàng nhập điểm đón và điểm đến.
+        Khách hàng chọn loại xe/dịch vụ.
+        Khách hàng xác nhận yêu cầu đặt xe.
+        Hệ thống tạo yêu cầu đặt xe.
+        Hệ thống tìm tài xế phù hợp.
+        Hệ thống gửi yêu cầu đến tài xế.
+        Tài xế chấp nhận chuyến.
+        Hệ thống phân công tài xế cho chuyến.
+        Hệ thống thông báo thông tin tài xế cho khách hàng.
+        Khách hàng theo dõi trạng thái chuyến.
+Luồng ngoại lệ
+        E1: Không tìm thấy tài xế → Hệ thống thông báo cho khách hàng.
+        E2: Tài xế từ chối → Hệ thống tìm tài xế khác.
+        E3: Tài xế không phản hồi → Hệ thống tìm tài xế khác.
+        E4: Khách hàng mất kết nối → Hệ thống duy trì yêu cầu và đồng bộ lại khi kết nối được khôi phục.
+
+UC-02: Thực hiện chuyến
+
+| Thành phần         | Nội dung                                                     |
+| ------------------ | ------------------------------------------------------------ |
+| **Use Case ID**    | UC-02                                                        |
+| **Tên Use Case**   | Thực hiện chuyến                                             |
+| **Actor chính**    | Tài xế                                                       |
+| **Actor phụ**      | Khách hàng                                                   |
+| **Mục tiêu**       | Tài xế thực hiện chuyến và cập nhật trạng thái cho hệ thống. |
+| **Tiền điều kiện** | Tài xế đã nhận chuyến.                                       |
+| **Hậu điều kiện**  | Chuyến được cập nhật trạng thái hoàn thành.                  |
+
+Luồng chính
+        Tài xế nhận chuyến.
+        Tài xế di chuyển đến điểm đón.
+        Tài xế cập nhật đã đến điểm đón.
+        Tài xế đón khách.
+        Tài xế cập nhật đã đón khách.
+        Tài xế di chuyển đến điểm đến.
+        Tài xế cập nhật đang di chuyển.
+        Tài xế hoàn thành chuyến.
+        Hệ thống cập nhật trạng thái hoàn thành.
+Luồng ngoại lệ
+        E1: Tài xế mất kết nối → Hệ thống lưu trạng thái và đồng bộ lại khi kết nối trở lại.
+        E2: Chuyến phát sinh sự cố → Nhân viên vận hành tiếp nhận và hỗ trợ xử lý.
+
+UC-03: Thanh toán
+
+| Thành phần         | Nội dung                                          |
+| ------------------ | ------------------------------------------------- |
+| **Use Case ID**    | UC-03                                             |
+| **Tên Use Case**   | Thanh toán                                        |
+| **Actor chính**    | Khách hàng                                        |
+| **Actor phụ**      | Nhà cung cấp thanh toán                           |
+| **Mục tiêu**       | Khách hàng thanh toán chi phí chuyến đi.          |
+| **Tiền điều kiện** | Chuyến đã hoàn thành và hệ thống đã tính cước.    |
+| **Hậu điều kiện**  | Giao dịch được ghi nhận thành công hoặc thất bại. |
+
+Luồng chính
+        Hệ thống tính số tiền phải thanh toán.
+        Khách hàng chọn phương thức thanh toán.
+        Nếu thanh toán điện tử, hệ thống gửi yêu cầu đến nhà cung cấp thanh toán.
+        Nhà cung cấp xử lý giao dịch.
+        Hệ thống nhận kết quả giao dịch.
+        Hệ thống lưu kết quả thanh toán.
+        Hệ thống thông báo kết quả cho khách hàng.
+Luồng ngoại lệ
+        E1: Thanh toán điện tử thất bại → Thông báo khách hàng và cho phép xử lý lại theo chính sách.
+        E2: Nhà cung cấp thanh toán không phản hồi → Không xác nhận giao dịch thành công.
+
+UC-04: Quản lý vận hành
+
+| Thành phần         | Nội dung                                               |
+| ------------------ | ------------------------------------------------------ |
+| **Use Case ID**    | UC-04                                                  |
+| **Tên Use Case**   | Quản lý vận hành                                       |
+| **Actor chính**    | Nhân viên vận hành                                     |
+| **Mục tiêu**       | Theo dõi và hỗ trợ xử lý các hoạt động trong hệ thống. |
+| **Tiền điều kiện** | Nhân viên đã đăng nhập và có quyền phù hợp.            |
+| **Hậu điều kiện**  | Thông tin được cập nhật hoặc sự cố được xử lý.         |
+
+
+Luồng chính
+        Nhân viên đăng nhập hệ thống.
+        Xem danh sách chuyến đang diễn ra.
+        Kiểm tra trạng thái tài xế.
+        Tra cứu thông tin chuyến.
+        Xử lý các trường hợp chuyến bị lỗi.
+        Tra cứu lịch sử giao dịch.
+        Hệ thống ghi nhận các thao tác quan trọng.
+Luồng ngoại lệ
+        E1: Nhân viên không có quyền → Hệ thống từ chối thao tác.
+        E2: Không tìm thấy thông tin → Hệ thống thông báo dữ liệu không tồn tại.
 
