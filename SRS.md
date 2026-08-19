@@ -425,21 +425,18 @@ Bước 8: Business rules and Exceptions (Những nguyên tắc nghiệp vụ v�
 Bước 9: Mô hình hoá dữ liệu (Data modeling)
 # BƯỚC 9: MÔ HÌNH HÓA DỮ LIỆU (DATA MODELING)
 # 9.1. Các thực thể chính
-KHÁCH HÀNG
-   │
-   │ 1:N
-   ▼
-CHUYẾN ĐI ───────── N:1 ─────── TÀI XẾ
-   │                              │
-   │                              │ 1:1 / 1:N
-   │                              ▼
-   │                         PHƯƠNG TIỆN
-   │
-   ├── 1:1 ──► THANH TOÁN
-   │
-   ├── 1:1 ──► ĐÁNH GIÁ
-   │
-   └── 1:N ──► THÔNG BÁO
+
+| STT | Thực thể | Mô tả |
+|---|---|---|
+| 1 | **USER** | Quản lý tài khoản và thông tin xác thực người dùng. |
+| 2 | **CUSTOMER** | Lưu thông tin khách hàng. |
+| 3 | **DRIVER** | Lưu thông tin tài xế và trạng thái hoạt động. |
+| 4 | **VEHICLE** | Lưu thông tin phương tiện của tài xế. |
+| 5 | **TRIP** | Lưu thông tin chuyến đi và trạng thái chuyến. |
+| 6 | **PAYMENT** | Lưu thông tin thanh toán của chuyến đi. |
+| 7 | **RATING** | Lưu đánh giá của khách hàng đối với tài xế. |
+| 8 | **NOTIFICATION** | Lưu thông tin các thông báo gửi đến người dùng. |
+| 9 | **AUDIT_LOG** | Lưu nhật ký các thao tác quan trọng trên hệ thống. |
    
 # 9.2. Danh sách thực thể và thuộc tính chính
 | Thực thể         | Thuộc tính chính                                                                                             |
