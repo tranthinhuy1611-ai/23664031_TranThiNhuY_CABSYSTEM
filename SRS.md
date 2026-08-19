@@ -1,4 +1,4 @@
-## CÁC BƯỚC CẦN THỰC HIỆN
+# CÁC BƯỚC CẦN THỰC HIỆN
 # Bước 1: - đọc và phân tích yêu cầu: hiểu về bussiness contesxt và bussiness problem
         - trả lời câu hỏi: khách hàng muốn giải quyết vấn đề gì
         - vì sao k thể đáp ứng, ai sử dụng ht này,
