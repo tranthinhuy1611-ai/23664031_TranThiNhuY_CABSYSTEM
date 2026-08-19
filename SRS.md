@@ -132,3 +132,27 @@ Xây dựng và triển khai thành công nền tảng **CAB System** trong vòn
 
 
 Bước 4: Xác định scope (phạm vi)
+# BƯỚC 4: XÁC ĐỊNH PHẠM VI DỰ ÁN (PROJECT SCOPE)
+
+### 1. Phân định Phạm vi Thực hiện (In-Scope vs. Out-of-Scope)
+
+| Hạng mục / Chức năng | In-Scope (Thuộc phạm vi 7 tuần) | Out-of-Scope (Không thực hiện ở pha này) |
+|---|---|---|
+| **Quản lý Tài khoản & Hồ sơ** | - Đăng ký, đăng nhập, quản lý thông tin cho Khách hàng, Tài xế, Nhân viên Vận hành.<br>- Cập nhật hồ sơ tài xế và thông tin phương tiện.<br>- Phân quyền truy cập quản trị cơ bản. | - Đăng nhập qua Mạng xã hội (Google, Facebook, Apple ID).<br>- Xác thực sinh trắc học (FaceID/Vân tay). |
+| **Đặt xe & Ghép chuyến** | - Nhập điểm đón/điểm đến, chọn loại xe.<br>- Tự động tìm & gợi ý tài xế theo vị trí GPS và trạng thái sẵn sàng.<br>- Xử lý tự động chuyển tài xế khác khi tài xế trước từ chối/không phản hồi.<br>- Thông báo khi không tìm thấy tài xế. | - Đặt xe trước theo lịch hẹn (Scheduled Rides).<br>- Đặt chuyến đi qua nhiều điểm dừng (Multi-stop rides).<br>- Thuật toán ghép chuyến thông minh tối ưu theo hành vi/lịch sử tài xế. |
+| **Theo dõi & Cập nhật Tiến trình** | - Cập nhật trạng thái chuyến đi (*Đã nhận, Đã đến điểm đón, Đã đón khách, Đang di chuyển, Hoàn thành*).<br>- Khách hàng theo dõi vị trí tài xế theo thời gian thực.<br>- Lưu thông tin vị trí GPS của tài xế. | - Chia sẻ hành trình thời gian thực cho người thân (Share Trip Live).<br>- Tích hợp bản đồ riêng của doanh nghiệp (Sử dụng API Bản đồ bên thứ 3 sẵn có). |
+| **Tính cước & Thanh toán** | - Tự động tính cước chuyến đi theo loại dịch vụ và thông tin tuyến đường.<br>- Thanh toán bằng Tiền mặt.<br>- Tích hợp 01 Cổng thanh toán điện tử bên ngoài (Payment Gateway).<br>- Xử lý khi thanh toán điện tử thất bại (cho phép thử lại/chuyển tiền mặt). | - Ví điện tử nội bộ / Tài khoản trả trước (In-app Wallet).<br>- Lưu trữ trực tiếp thông tin thẻ ngân hàng/thẻ tín dụng trên hệ thống CAB.<br>- Áp dụng Mã giảm giá / Chương trình khuyến mãi phức tạp. |
+| **Thông báo (Notifications)** | - Gửi thông báo Push Notification / SMS về trạng thái chuyến đi và kết quả thanh toán cho Khách hàng & Tài xế.<br>- Tích hợp 01 Nhà cung cấp dịch vụ thông báo bên ngoài. | - Tích hợp Đa kênh thông báo nâng cao (Zalo ZNS, WhatsApp, Email Marketing). |
+| **Đánh giá & Lịch sử** | - Khách hàng xem lịch sử chuyến đi và số tiền đã trả.<br>- Khách hàng đánh giá tài xế (sao/nhận xét) sau chuyến đi. | - Hệ thống thưởng/phạt tự động dựa trên đánh giá sao.<br>- Chương trình Khách hàng thân thiết (Loyalty Program). |
+| **Quản trị & Báo cáo (Admin)** | - Dashboard xem các chuyến đi đang diễn ra và trạng thái tài xế thời gian thực.<br>- Tra cứu lịch sử giao dịch & hỗ trợ can thiệp chuyến đi bị lỗi.<br>- Báo cáo cơ bản: Số lượng chuyến, doanh thu, tỷ lệ hoàn thành/hủy, hiệu quả tài xế. | - Báo cáo phân tích dự báo bằng AI/Machine Learning.<br>- Tự động xuất hóa đơn điện tử (e-Invoice) kết nối Tổng cục Thuế. |
+
+---
+
+### 2. Phạm vi Phát triển Tương lai (Future Roadmap)
+
+Nhằm đảm bảo mục tiêu **triển khai trong 7 tuần**, các tính năng dưới đây được hoãn lại và sẽ phát triển trong các giai đoạn tiếp theo dựa trên kiến trúc mở của hệ thống:
+
+1. **Mở rộng Loại hình Dịch vụ:** Bổ sung giao hàng (CAB Delivery), đi chung xe (CAB Pool), thuê xe theo giờ.
+2. **Đa dạng hóa Thanh toán:** Tích hợp thêm các Cổng thanh toán mới, Ví điện tử (Momo, VNPay, ZaloPay) và Ví nội bộ.
+3. **Mở rộng Kênh Thông báo:** Bổ sung các nhà cung cấp SMS/OTT mới để tối ưu chi phí gửi tin.
+4. **Tối ưu Thuật toán Ghép chuyến:** Nâng cấp AI để dự báo nhu cầu đặt xe theo khu vực và điều phối tài xế trước (Surge Pricing & Dynamic Dispatch).
