@@ -375,3 +375,53 @@ erDiagram
         timestamp recorded_at
     }
 ```
+Bước 10: Xác định Non-Functional Requirement
+# BƯỚC 10: XÁC ĐỊNH YÊU CẦU PHI CHỨC NĂNG (NON-FUNCTIONAL REQUIREMENTS)
+
+---
+
+### 1. Hiệu năng & Thời gian Phản hồi (Performance & Response Time)
+
+| Mã YC | Hạng mục | Tiêu chuẩn Kỹ thuật / Chỉ số Đo lường (KPI) |
+|---|---|---|
+| **NFR-01** | **Thời gian Phản hồi API** | - 95% các yêu cầu tìm xe, đặt xe và cập nhật trạng thái phải trả về kết quả dưới **2 giây**.<br>- Các thao tác tra cứu tĩnh (như xem lịch sử chuyến đi) phản hồi dưới **1 giây**. |
+| **NFR-02** | **Cập nhật Vị trí GPS** | Định vị GPS của tài xế được đồng bộ lên hệ thống central theo chu kỳ **3 - 5 giây/lần** khi tài xế đang ở trạng thái `ONLINE` hoặc `IN_TRIP`. |
+| **NFR-03** | **Khả năng Tải (Throughput)** | Hệ thống đáp ứng xử lý tối thiểu **100 giao dịch đặt xe/giây (TPS)** và đảm bảo tải cho ít nhất **1,000 tài xế hoạt động đồng thời** mà không bị nghẽn mạng. |
+
+---
+
+### 2. Độ tin cậy & Tính Khả dụng (Reliability & Availability)
+
+| Mã YC | Hạng mục | Tiêu chuẩn Kỹ thuật / Chỉ số Đo lường (KPI) |
+|---|---|---|
+| **NFR-04** | **Tính Sẵn sàng (Uptime)** | Hệ thống đạt chỉ số sẵn sàng tối thiểu **99.5% Uptime** (thời gian gián đoạn tối đa không quá 3.6 giờ/tháng). |
+| **NFR-05** | **Khả năng Phục hồi (Disaster Recovery)** | - **RPO (Recovery Point Objective):** Dữ liệu chuyến đi và giao dịch không bị mất quá **1 phút** khi có sự cố hạ tầng nghiêm trọng.<br>- **RTO (Recovery Time Objective):** Khôi phục hoạt động hệ thống trong vòng **30 phút**. |
+| **NFR-06** | **Chịu lỗi Độc lập (Fault Tolerance)** | Khi các dịch vụ bên thứ 3 (Cổng thanh toán, SMS) bị lỗi kết nối, tính năng Đặt xe & Ghép chuyến cốt lõi **vẫn phải hoạt động bình thường**. |
+
+---
+
+### 3. An toàn & Bảo mật Dữ liệu (Security & Data Protection)
+
+| Mã YC | Hạng mục | Tiêu chuẩn Kỹ thuật / Chỉ số Đo lường (KPI) |
+|---|---|---|
+| **NFR-07** | **Mã hóa Dữ liệu** | - Tất cả kết nối API giữa Mobile App/Web với Server phải mã hóa qua **HTTPS (TLS 1.2/1.3)**.<br>- Mật khẩu và thông tin định danh nhạy cảm phải được mã hóa 1 chiều bằng thuật toán an toàn (ví dụ: `BCrypt` hoặc `Argon2`). |
+| **NFR-08** | **Tuân thủ Bảo mật Thẻ (PCI-DSS)** | Tuyệt đối **không lưu trữ** thông tin nhạy cảm của thẻ (Số thẻ, ngày hết hạn, CVV/CVC) trên cơ sở dữ liệu CAB. Mọi giao dịch qua thẻ dùng kỹ thuật Tokenization từ Payment Gateway. |
+| **NFR-09** | **Phân quyền & Nhật ký (Audit Log)** | - Áp dụng mô hình phân quyền theo vai trò (RBAC - Role-Based Access Control) cho Nhân viên Vận hành.<br>- Ghi log toàn bộ các thao tác chỉnh sửa dữ liệu hoặc can thiệp chuyến đi của Admin để phục vụ kiểm vết. |
+
+---
+
+### 4. Khả năng Mở rộng & Bảo trì (Scalability & Maintainability)
+
+| Mã YC | Hạng mục | Tiêu chuẩn Kỹ thuật / Chỉ số Đo lường (KPI) |
+|---|---|---|
+| **NFR-10** | **Kiến trúc Linh hoạt (Decoupled Architecture)** | Xây dựng hệ thống theo mô hình dịch vụ độc lập (Microservices hoặc Modular Monolith) để dễ dàng tích hợp thêm loại xe, ví điện tử mới mà không làm ảnh hưởng đến mã nguồn hiện tại. |
+| **NFR-11** | **Khả năng Tự động Mở rộng (Auto-scaling)** | Hạ tầng Cloud/Server hỗ trợ tự động nâng dung lượng tính toán (Horizontal Scaling) khi lưu lượng truy cập tăng vọt đột biến vào các khung giờ cao điểm. |
+
+---
+
+### 5. Khả năng Sử dụng (Usability & Compatibility)
+
+| Mã YC | Hạng mục | Tiêu chuẩn Kỹ thuật / Chỉ số Đo lường (KPI) |
+|---|---|---|
+| **NFR-12** | **Giao diện Người dùng (UI/UX)** | - Thiết kế tối giản, cho phép Khách hàng thực hiện thao tác đặt xe thành công trong **không quá 3 bước** chạm.<br>- Giao diện ứng dụng tài xế hiển thị nút nhận chuyến to, rõ ràng, dễ thao tác an toàn khi đang lái xe. |
+| **NFR-13** | **Tương thích Thiết bị** | - Ứng dụng di động hoạt động tốt trên cả 2 hệ điều hành: **Android (từ phiên bản 8.0 trở lên)** và **iOS (từ phiên bản 13.0 trở lên)**.<br>- Trang Admin tương thích tốt trên các trình duyệt hiện đại (Chrome, Safari, Edge). |
