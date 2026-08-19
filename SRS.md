@@ -249,30 +249,129 @@ Bảng này mô tả mối liên hệ và thứ tự ưu tiên phụ thuộc gi�
 | **F-06.2 (Đánh giá)** | F-04.2 (Thanh toán xong) | Khách hàng chỉ đánh giá tài xế sau khi hoàn tất chuyến đi và thanh toán thành công. |
 
 
-Bước 7: Phân rã yêu cầu chức năng (Functional Requirement decomposition)
-# BƯỚC 7: PHÂN RÃ YÊU CẦU CHỨC NĂNG (FUNCTIONAL REQUIREMENTS DECOMPOSITION)
+Bước 8: Business rules and Exceptions (Những nguyên tắc nghiệp vụ và ngoại lệ)
+# BƯỚC 8: NGUYÊN TẮC NGHIỆP VỤ VÀ XỬ LÝ NGOẠI LỆ (BUSINESS RULES & EXCEPTIONS)
 
 ---
 
-### 1. Sơ đồ Phân rã Chức năng Tổng quan (Functional Decomposition Tree)
+### 1. Danh sách Nguyên tắc Nghiệp vụ Cốt lõi (Core Business Rules)
+
+| Mã Rule | Nhóm Nghiệp vụ | Nguyên tắc Nghiệp vụ Chi tiết (Business Rule) |
+|---|---|---|
+| **BR-01** | Điều phối & Ghép chuyến | - Hệ thống chỉ đề xuất chuyến đi cho tài xế ở trạng thái **"Sẵn sàng"** và có vị trí GPS trong bán kính quy định (ví dụ: tối đa 5km) so với điểm đón của khách hàng.<br>- Mỗi tài xế tại một thời điểm chỉ được phép nhận **01 chuyến đi duy nhất** (không hỗ trợ nhận ghép trùng chuyến). |
+| **BR-02** | Phản hồi từ Tài xế | - Tài xế có tối đa **15 giây** để bấm "Chấp nhận" hoặc "Từ chối" kể từ khi nhận được thông báo đề xuất chuyến đi.<br>- Nếu quá 15 giây không phản hồi, hệ thống tự động đánh giá là tài xế bỏ qua chuyến và chuyển sang tài xế tiếp theo. |
+| **BR-03** | Tính cước & Khuyến mãi | - Tổng tiền cước chuyến đi bao gồm: *Cước phí cơ bản + (Đơn giá/km × Quãng đường) + Phụ phí (nếu có)*.<br>- Cước phí tạm tính được khóa chốt tại thời điểm đặt xe, trừ trường hợp khách hàng yêu cầu đổi điểm đến mid-trip. |
+| **BR-04** | An toàn & Bảo mật Thanh toán | - **Không lưu trữ** trực tiếp thông tin thẻ ngân hàng/CVV/PIN của khách hàng trên cơ sở dữ liệu hệ thống CAB. Chỉ lưu mã Token do Cổng thanh toán cấp phép.<br>- Mọi giao dịch thanh toán điện tử phải thông qua nhà cung cấp Payment Gateway uy tín. |
+| **BR-05** | Hủy chuyến đi | - Khách hàng được phép **Hủy chuyến miễn phí** trong vòng **03 phút** kể từ khi tài xế nhận chuyến.<br>- Nếu hủy sau 03 phút hoặc khi tài xế đã đến điểm đón (`ARRIVED`), hệ thống ghi nhận vi phạm chính sách (hoặc áp dụng phí hủy chuyến theo cấu hình). |
+| **BR-06** | Độc lập Chức năng (Decoupling) | - Lỗi gián đoạn từ các đối tác bên ngoài (như Cổng thanh toán, Nhà cung cấp SMS) **không được làm ảnh hưởng** đến luồng Đặt xe và Ghép chuyến cốt lõi của hệ thống. |
+
+---
+
+### 2. Quản lý các Trường hợp Ngoại lệ (Exception Handling)
+
+| Mã Ngoại lệ | Trường hợp Ngoại lệ (Exception Scenario) | Tác động Hệ thống | Quy trình Xử lý Ngoại lệ (Resolution Flow) |
+|---|---|---|---|
+| **EX-01** | **Tài xế bỏ qua / Từ chối nhận chuyến** | Chuyến đi chưa có người tiếp nhận. | 1. Hệ thống tự động ghi nhận tài xế trước từ chối.<br>2. Tìm kiếm và chuyển yêu cầu mời chuyến đến tài xế phù hợp tiếp theo trong danh sách.<br>3. Khách hàng không cần thao tác lại. |
+| **EX-02** | **Không tìm thấy tài xế khả dụng (No Driver Found)** | Hết danh sách tài xế quét hoặc không có ai ở trạng thái "Sẵn sàng". | 1. Hệ thống dừng vòng lặp tìm kiếm sau số lần quét quy định.<br>2. Chuyển trạng thái chuyến đi sang `UNMATCHED`.<br>3. Hiển thị thông báo thân thiện cho khách: *"Hiện chưa tìm thấy tài xế, vui lòng thử lại sau"*. |
+| **EX-03** | **Thanh toán Điện tử thất bại** | Giao dịch qua Payment Gateway báo lỗi (thẻ hết hạn, không đủ số dư, timeout ngân hàng). | 1. Hệ thống ghi nhận trạng thái thanh toán thất bại.<br>2. Gửi thông báo sự cố cho Khách hàng và Tài xế.<br>3. Cho phép Khách hàng chọn: **Thử lại thanh toán điện tử** hoặc **Chuyển sang trả Tiền mặt**. |
+| **EX-04** | **Tài xế / Khách hàng Hủy chuyến giữa chừng** | Chuyến đi bị chấm dứt trước khi hoàn thành (`CANCELLED`). | 1. Cập nhật trạng thái chuyến đi thành `CANCELLED`.<br>2. Giải phóng trạng thái tài xế về lại "Sẵn sàng".<br>3. Ghi nhận lý do hủy chuyến vào hệ thống để bộ phận Chăm sóc khách hàng (CS) tra cứu khi có khiếu nại. |
+| **EX-05** | **Mất kết nối GPS / Mạng di động (3G/4G)** | Thiết bị của tài xế bị rớt mạng hoặc mất tín hiệu định vị khi đang chạy chuyến. | 1. Ứng dụng mobile của tài xế tạm thời lưu dữ liệu tọa độ GPS local trên thiết bị.<br>2. Khi có mạng trở lại, ứng dụng tự động đồng bộ (sync) dữ liệu hành trình lên hệ thống central. |
+| **EX-06** | **Đối tác Cổng thanh toán / SMS bị ngắt kết nối (API Down)** | Không thể gửi OTP/SMS hoặc không gọi được API thanh toán. | 1. Hệ thống kích hoạt chế độ fallback / cảnh báo log lỗi.<br>2. Chuyển hướng thanh toán mặc định sang Tiền mặt.<br>3. Duy trì luồng đặt xe cốt lõi hoạt động bình thường. |
+
+---
+
+### 3. Ma trận Quyền Can thiệp Nghiệp vụ (Admin Interventions)
+
+Dành cho Nhân viên Vận hành (Operations Team) xử lý các tình huống ngoại lệ đặc biệt trên Admin Dashboard:
+
+- **Can thiệp Hủy chuyến khẩn cấp:** Cho phép Admin bấm hủy chuyến và giải phóng tài xế khi nhận được cuộc gọi báo sự cố (tai nạn, hỏng xe).
+- **Điều chỉnh Tiền cước thủ công:** Cho phép Bộ phận CS/Kế toán điều chỉnh cước phí hoặc hoàn tiền cho khách hàng nếu tài xế đi sai lộ trình nghiêm trọng.
+- **Khóa tài khoản Tạm thời:** Tự động hoặc thủ công khóa trạng thái nhận chuyến của tài xế nếu tỷ lệ hủy chuyến/bỏ chuyến vượt quá mức cho phép trong ngày.
+
+Bước 9: Mô hình hoá dữ liệu (Data modeling)
+# BƯỚC 9: MÔ HÌNH HÓA DỮ LIỆU (DATA MODELING)
+
+---
+
+### 1. Sơ đồ Thực thể - Mối quan hệ (Entity Relationship Diagram - ERD)
 
 ```mermaid
-graph TD
-    SYS[Hệ thống CAB System] --> M1[F-01: Quản lý Tài khoản & Hồ sơ]
-    SYS --> M2[F-02: Quản lý Đặt xe & Điều phối]
-    SYS --> M3[F-03: Thực hiện & Theo dõi Chuyến đi]
-    SYS --> M4[F-04: Tính cước & Thanh toán]
-    SYS --> M5[F-05: Hệ thống Thông báo]
-    SYS --> M6[F-06: Đánh giá & Lịch sử]
-    SYS --> M7[F-07: Quản trị Admin & Báo cáo]
+erDiagram
+    USERS ||--o{ TRIPS : "places (Customer)"
+    USERS ||--o{ TRIPS : "drives (Driver)"
+    USERS ||--o| DRIVER_PROFILES : "has profile"
+    USERS ||--o| VEHICLES : "owns"
+    TRIPS ||--o| PAYMENTS : "has payment"
+    TRIPS ||--o| REVIEWS : "has review"
+    TRIPS ||--o{ TRIP_LOCATIONS : "tracks GPS"
 
-    M2 --> F21[F-02.1: Tạo yêu cầu đặt xe]
-    M2 --> F22[F-02.2: Định vị GPS tài xế]
-    M2 --> F23[F-02.3: Thuật toán ghép chuyến]
-    M2 --> F24[F-02.4: Xử lý Timeout/Từ chối]
+    USERS {
+        bigint user_id PK
+        string full_name
+        string phone_number
+        string email
+        string role
+        string status
+        timestamp created_at
+    }
 
-    M4 --> F41[F-04.1: Tính cước tự động]
-    M4 --> F42[F-04.2: Thanh toán Tiền mặt]
-    M4 --> F43[F-04.3: Thanh toán Cổng điện tử]
-    M4 --> F44[F-04.4: Xử lý giao dịch lỗi]
+    DRIVER_PROFILES {
+        bigint driver_id PK, FK
+        string license_number
+        string identity_card
+        string status
+        decimal rating_avg
+    }
+
+    VEHICLES {
+        bigint vehicle_id PK
+        bigint driver_id FK
+        string license_plate
+        string vehicle_type
+        string model
+        string color
+    }
+
+    TRIPS {
+        bigint trip_id PK
+        bigint customer_id FK
+        bigint driver_id FK
+        string pickup_address
+        decimal pickup_lat
+        decimal pickup_lng
+        string dropoff_address
+        decimal dropoff_lat
+        decimal dropoff_lng
+        decimal estimated_fare
+        decimal actual_fare
+        string status
+        timestamp created_at
+        timestamp completed_at
+    }
+
+    PAYMENTS {
+        bigint payment_id PK
+        bigint trip_id FK
+        decimal amount
+        string payment_method
+        string payment_status
+        string transaction_token
+        timestamp paid_at
+    }
+
+    REVIEWS {
+        bigint review_id PK
+        bigint trip_id FK
+        int rating_stars
+        string comment
+        timestamp created_at
+    }
+
+    TRIP_LOCATIONS {
+        bigint location_id PK
+        bigint trip_id FK
+        decimal latitude
+        decimal longitude
+        timestamp recorded_at
+    }
 ```
