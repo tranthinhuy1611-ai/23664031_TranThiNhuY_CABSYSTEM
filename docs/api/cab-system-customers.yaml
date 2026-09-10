@@ -1,0 +1,139 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - Customers
+  version: 1.0.0
+  description: |-
+    Module khách hàng của CAB System. Quản lý hồ sơ, thông tin cá nhân và lịch sử đặt xe.
+servers:
+  - url: https://api.cab-system.local/v1
+paths:
+  /customers:
+    post:
+      tags: [Users]
+      summary: Tạo hồ sơ khách hàng
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerCreateRequest"
+      responses:
+        "201":
+          description: Khách hàng được tạo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+    get:
+      tags: [Users]
+      summary: Liệt kê khách hàng
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: Danh sách khách hàng
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerListResponse"
+
+  /customers/{customerId}:
+    get:
+      tags: [Users]
+      summary: Lấy thông tin khách hàng
+      parameters:
+        - $ref: "#/components/parameters/CustomerIdParam"
+      responses:
+        "200":
+          description: Chi tiết khách hàng
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "404":
+          description: Không tìm thấy khách hàng
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      description: Số trang
+      schema:
+        type: integer
+        default: 1
+    LimitParam:
+      name: limit
+      in: query
+      description: Số lượng bản ghi trên 1 trang
+      schema:
+        type: integer
+        default: 20
+    CustomerIdParam:
+      name: customerId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    CustomerCreateRequest:
+      type: object
+      required: [fullName, phone, email]
+      properties:
+        fullName:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+        fullName:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+        rating:
+          type: number
+          format: float
+        createdAt:
+          type: string
+          format: date-time
+    CustomerListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Customer"
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time

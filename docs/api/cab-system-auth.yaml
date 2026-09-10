@@ -1,0 +1,139 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - Authentication
+  version: 1.0.0
+  description: |-
+    Module xác thực của hệ thống CAB System. Quản lý login, logout và refresh token.
+servers:
+  - url: https://api.cab-system.local/v1
+    description: Development server
+security:
+  - bearerAuth: []
+paths:
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Đăng nhập hệ thống
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Đăng nhập thành công
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Không hợp lệ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      summary: Đăng xuất
+      responses:
+        "200":
+          description: Đăng xuất thành công
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Làm mới access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenRequest"
+      responses:
+        "200":
+          description: Token mới
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+    RefreshTokenRequest:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken:
+          type: string
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        tokenType:
+          type: string
+          example: bearer
+        expiresIn:
+          type: integer
+          example: 3600
+        user:
+          $ref: "#/components/schemas/User"
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        fullName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        role:
+          type: string
+          enum: [customer, driver, operator, admin, finance]
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: string
+          example: UNAUTHORIZED
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time

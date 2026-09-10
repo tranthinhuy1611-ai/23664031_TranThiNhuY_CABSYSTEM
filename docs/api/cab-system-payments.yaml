@@ -1,0 +1,232 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - Payments
+  version: 1.0.0
+  description: |-
+    Module thanh toán của CAB System. Quản lý cước phí, giao dịch, thất bại, hoàn tiền và trạng thái thanh toán.
+servers:
+  - url: https://api.cab-system.local/v1
+paths:
+  /payments/quote:
+    post:
+      tags: [Payments]
+      summary: Tính cước chuyến đi
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuoteRequest"
+      responses:
+        "200":
+          description: Thông tin cước phí
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuoteResponse"
+
+  /payments:
+    post:
+      tags: [Payments]
+      summary: Tạo giao dịch thanh toán
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentCreateRequest"
+      responses:
+        "201":
+          description: Thanh toán tạo thành công
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+    get:
+      tags: [Payments]
+      summary: Danh sách giao dịch thanh toán
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: Danh sách thanh toán
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentListResponse"
+
+  /payments/{paymentId}:
+    get:
+      tags: [Payments]
+      summary: Chi tiết giao dịch thanh toán
+      parameters:
+        - $ref: "#/components/parameters/PaymentIdParam"
+      responses:
+        "200":
+          description: Chi tiết thanh toán
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+        "404":
+          description: Không tìm thấy giao dịch
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /payments/{paymentId}/refund:
+    post:
+      tags: [Payments]
+      summary: Hoàn tiền hoặc xử lý hoàn trả
+      parameters:
+        - $ref: "#/components/parameters/PaymentIdParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefundRequest"
+      responses:
+        "200":
+          description: Hoàn tiền xử lý thành công
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+components:
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+    LimitParam:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        default: 20
+    PaymentIdParam:
+      name: paymentId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    Location:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        address:
+          type: string
+    QuoteRequest:
+      type: object
+      required: [pickup, destination, serviceType]
+      properties:
+        pickup:
+          $ref: "#/components/schemas/Location"
+        destination:
+          $ref: "#/components/schemas/Location"
+        serviceType:
+          type: string
+          enum: [standard, vip, airport, package]
+    QuoteResponse:
+      type: object
+      properties:
+        serviceType:
+          type: string
+        distanceKm:
+          type: number
+          format: double
+        baseFare:
+          type: number
+          format: double
+        surcharge:
+          type: number
+          format: double
+        totalFare:
+          type: number
+          format: double
+        currency:
+          type: string
+          example: VND
+    PaymentCreateRequest:
+      type: object
+      required: [tripId, method, amount]
+      properties:
+        tripId:
+          type: string
+        method:
+          type: string
+          enum: [cash, card, wallet, bank_transfer]
+        amount:
+          type: number
+          format: double
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+        tripId:
+          type: string
+        customerId:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+          example: VND
+        method:
+          type: string
+          enum: [cash, card, wallet, bank_transfer]
+        status:
+          type: string
+          enum: [pending, paid, failed, refunded]
+        gatewayRef:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    PaymentListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Payment"
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    RefundRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+        amount:
+          type: number
+          format: double
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time

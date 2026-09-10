@@ -1,0 +1,180 @@
+@baseUrl = http://localhost:3000/api
+
+### Health
+GET {{baseUrl}}/health
+
+### Auth login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "customer01",
+  "password": "123456"
+}
+
+### Create customer
+POST {{baseUrl}}/customers
+Content-Type: application/json
+
+{
+  "fullName": "Khách hàng Demo",
+  "phone": "0900000001",
+  "email": "demo.customer@example.com",
+  "address": "Ho Chi Minh City"
+}
+
+### List customers
+GET {{baseUrl}}/customers
+
+### Get customer detail
+GET {{baseUrl}}/customers/C001
+
+### Create driver
+POST {{baseUrl}}/drivers
+Content-Type: application/json
+
+{
+  "fullName": "Tài xế Demo",
+  "phone": "0900000002",
+  "vehicleType": "Taxi",
+  "vehiclePlate": "59A-12345",
+  "licenseNumber": "L12345"
+}
+
+### List drivers
+GET {{baseUrl}}/drivers
+
+### Get driver detail
+GET {{baseUrl}}/drivers/D001
+
+### Update driver location
+PUT {{baseUrl}}/drivers/D001/location
+Content-Type: application/json
+
+{
+  "latitude": 10.79,
+  "longitude": 106.70,
+  "address": "Quận 1, HCM"
+}
+
+### Create trip
+POST {{baseUrl}}/trips
+Content-Type: application/json
+
+{
+  "customerId": "C001",
+  "pickup": {
+    "latitude": 10.78,
+    "longitude": 106.69,
+    "address": "Quận 1, HCM"
+  },
+  "destination": {
+    "latitude": 10.81,
+    "longitude": 106.63,
+    "address": "Bến Thành, HCM"
+  },
+  "serviceType": "standard",
+  "requestedAt": "2026-09-09T10:00:00Z"
+}
+
+### List trips
+GET {{baseUrl}}/trips
+
+### Get trip detail
+GET {{baseUrl}}/trips/T001
+
+### Update trip status
+PATCH {{baseUrl}}/trips/T001
+Content-Type: application/json
+
+{
+  "status": "started",
+  "reason": "Driver arrived"
+}
+
+### Assign driver
+POST {{baseUrl}}/trips/T001/assign
+Content-Type: application/json
+
+{
+  "driverId": "D001"
+}
+
+### Estimate trip
+GET {{baseUrl}}/trips/T001/estimate
+
+### Cancel trip
+POST {{baseUrl}}/trips/T001/cancel
+Content-Type: application/json
+
+{
+  "reason": "Customer canceled"
+}
+
+### Quote payment
+POST {{baseUrl}}/payments/quote
+Content-Type: application/json
+
+{
+  "pickup": {
+    "latitude": 10.78,
+    "longitude": 106.69,
+    "address": "Quận 1, HCM"
+  },
+  "destination": {
+    "latitude": 10.81,
+    "longitude": 106.63,
+    "address": "Bến Thành, HCM"
+  },
+  "serviceType": "vip"
+}
+
+### Create payment
+POST {{baseUrl}}/payments
+Content-Type: application/json
+
+{
+  "tripId": "T001",
+  "method": "card",
+  "amount": 120000
+}
+
+### List payments
+GET {{baseUrl}}/payments
+
+### Get payment detail
+GET {{baseUrl}}/payments/P001
+
+### Refund payment
+POST {{baseUrl}}/payments/P001/refund
+Content-Type: application/json
+
+{
+  "reason": "Customer requested refund",
+  "amount": 120000
+}
+
+### Create notification
+POST {{baseUrl}}/notifications
+Content-Type: application/json
+
+{
+  "recipientId": "C001",
+  "type": "push",
+  "message": "Tài xế đã nhận chuyến"
+}
+
+### List notifications
+GET {{baseUrl}}/notifications
+
+### Operation assignments
+GET {{baseUrl}}/operations/assignments
+
+### Operation schedule
+GET {{baseUrl}}/operations/schedule
+
+### Revenue report
+GET {{baseUrl}}/reports/revenue?fromDate=2026-01-01&toDate=2026-12-31
+
+### Trips report
+GET {{baseUrl}}/reports/trips?driverId=D001&status=assigned

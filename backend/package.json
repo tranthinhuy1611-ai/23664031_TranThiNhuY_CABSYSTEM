@@ -1,0 +1,11 @@
+{
+  "name": "cab-system-demo-mvc-nodejs",
+  "version": "1.0.0",
+  "description": "Demo MVC CAB System API using Node.js built-in HTTP server",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node src/server.js"
+  }
+}

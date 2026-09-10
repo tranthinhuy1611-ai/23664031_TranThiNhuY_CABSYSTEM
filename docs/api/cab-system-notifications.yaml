@@ -1,0 +1,108 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - Notifications
+  version: 1.0.0
+  description: |-
+    Module thông báo của CAB System. Gửi và theo dõi thông báo đến khách hàng và tài xế theo kênh khác nhau.
+servers:
+  - url: https://api.cab-system.local/v1
+paths:
+  /notifications:
+    post:
+      tags: [Notifications]
+      summary: Gửi thông báo theo kênh
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationCreateRequest"
+      responses:
+        "201":
+          description: Thông báo được tạo và gửi
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+    get:
+      tags: [Notifications]
+      summary: Lấy lịch sử thông báo
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: Danh sách thông báo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationListResponse"
+components:
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+    LimitParam:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        default: 20
+  schemas:
+    NotificationCreateRequest:
+      type: object
+      required: [recipientId, type, message]
+      properties:
+        recipientId:
+          type: string
+        type:
+          type: string
+          enum: [sms, email, push, inapp]
+        message:
+          type: string
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+        recipientId:
+          type: string
+        type:
+          type: string
+        message:
+          type: string
+        sentAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [pending, sent, failed]
+    NotificationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Notification"
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time

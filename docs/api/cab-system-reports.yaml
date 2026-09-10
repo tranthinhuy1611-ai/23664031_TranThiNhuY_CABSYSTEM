@@ -1,0 +1,99 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - Reports
+  version: 1.0.0
+  description: |-
+    Module báo cáo của CAB System. Cung cấp báo cáo doanh thu, hoạt động chuyến đi và thống kê vận hành.
+servers:
+  - url: https://api.cab-system.local/v1
+paths:
+  /reports/revenue:
+    get:
+      tags: [Reports]
+      summary: Báo cáo doanh thu theo khoảng thời gian
+      parameters:
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Báo cáo doanh thu
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RevenueReportResponse"
+
+  /reports/trips:
+    get:
+      tags: [Reports]
+      summary: Báo cáo hoạt động chuyến đi
+      parameters:
+        - name: driverId
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Báo cáo chuyến đi
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TripReportResponse"
+components:
+  schemas:
+    RevenueReportResponse:
+      type: object
+      properties:
+        fromDate:
+          type: string
+          format: date
+        toDate:
+          type: string
+          format: date
+        totalRevenue:
+          type: number
+          format: double
+        totalTrips:
+          type: integer
+        avgFare:
+          type: number
+          format: double
+    TripReportResponse:
+      type: object
+      properties:
+        totalTrips:
+          type: integer
+        completedTrips:
+          type: integer
+        canceledTrips:
+          type: integer
+        avgDurationMinutes:
+          type: integer
+        statusSummary:
+          type: object
+          additionalProperties:
+            type: integer
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time

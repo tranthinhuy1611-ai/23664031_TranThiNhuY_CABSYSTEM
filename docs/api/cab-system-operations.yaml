@@ -1,0 +1,136 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - Operations
+  version: 1.0.0
+  description: |-
+    Module vận hành của CAB System. Giám sát và điều phối chuyến đi, lịch phân công, theo dõi sự cố và trạng thái tài xế.
+servers:
+  - url: https://api.cab-system.local/v1
+paths:
+  /operations/trips/{tripId}/monitor:
+    get:
+      tags: [Operations]
+      summary: Giám sát chuyến đi của nhân viên vận hành
+      parameters:
+        - $ref: "#/components/parameters/TripIdParam"
+      responses:
+        "200":
+          description: Trạng thái chuyến đi được giám sát
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TripMonitorResponse"
+
+  /operations/assignments:
+    get:
+      tags: [Operations]
+      summary: Lấy lịch phân công hoạt động
+      responses:
+        "200":
+          description: Danh sách phân công vận hành
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssignmentListResponse"
+
+  /operations/schedule:
+    get:
+      tags: [Operations]
+      summary: Xem lịch làm việc và trạng thái tài xế
+      responses:
+        "200":
+          description: Bảng trạng thái vận hành
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OperationScheduleResponse"
+components:
+  parameters:
+    TripIdParam:
+      name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    Location:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        address:
+          type: string
+    TripMonitorResponse:
+      type: object
+      properties:
+        tripId:
+          type: string
+        driverId:
+          type: string
+        status:
+          type: string
+        driverLocation:
+          $ref: "#/components/schemas/Location"
+        pickup:
+          $ref: "#/components/schemas/Location"
+        destination:
+          $ref: "#/components/schemas/Location"
+    Assignment:
+      type: object
+      properties:
+        id:
+          type: string
+        tripId:
+          type: string
+        driverId:
+          type: string
+        operatorId:
+          type: string
+        assignedAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+    AssignmentListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Assignment"
+    OperationScheduleResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        drivers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              fullName:
+                type: string
+              status:
+                type: string
+              vehicleType:
+                type: string
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time

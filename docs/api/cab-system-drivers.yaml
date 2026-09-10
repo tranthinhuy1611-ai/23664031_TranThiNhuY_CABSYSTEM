@@ -1,0 +1,225 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - Drivers
+  version: 1.0.0
+  description: |-
+    Module tài xế của CAB System. Quản lý hồ sơ, trạng thái, vị trí và nhận chuyến.
+servers:
+  - url: https://api.cab-system.local/v1
+paths:
+  /drivers:
+    post:
+      tags: [Drivers]
+      summary: Tạo hồ sơ tài xế
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DriverCreateRequest"
+      responses:
+        "201":
+          description: Tài xế được tạo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Driver"
+    get:
+      tags: [Drivers]
+      summary: Liệt kê tài xế
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/LimitParam"
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [available, busy, offline]
+      responses:
+        "200":
+          description: Danh sách tài xế
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DriverListResponse"
+
+  /drivers/{driverId}:
+    get:
+      tags: [Drivers]
+      summary: Lấy chi tiết tài xế
+      parameters:
+        - $ref: "#/components/parameters/DriverIdParam"
+      responses:
+        "200":
+          description: Chi tiết tài xế
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Driver"
+        "404":
+          description: Không tìm thấy tài xế
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      tags: [Drivers]
+      summary: Cập nhật trạng thái và vị trí tài xế
+      parameters:
+        - $ref: "#/components/parameters/DriverIdParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DriverUpdateRequest"
+      responses:
+        "200":
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Driver"
+
+  /drivers/{driverId}/location:
+    put:
+      tags: [Drivers]
+      summary: Cập nhật vị trí tài xế
+      parameters:
+        - $ref: "#/components/parameters/DriverIdParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DriverLocationRequest"
+      responses:
+        "200":
+          description: Vị trí cập nhật
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+components:
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+    LimitParam:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        default: 20
+    DriverIdParam:
+      name: driverId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    DriverCreateRequest:
+      type: object
+      required: [fullName, phone, vehicleType, vehiclePlate]
+      properties:
+        fullName:
+          type: string
+        phone:
+          type: string
+        vehicleType:
+          type: string
+        vehiclePlate:
+          type: string
+        licenseNumber:
+          type: string
+    Driver:
+      type: object
+      properties:
+        id:
+          type: string
+        fullName:
+          type: string
+        phone:
+          type: string
+        vehicleType:
+          type: string
+        vehiclePlate:
+          type: string
+        licenseNumber:
+          type: string
+        status:
+          type: string
+          enum: [available, busy, offline]
+        rating:
+          type: number
+          format: float
+        currentLocation:
+          $ref: "#/components/schemas/Location"
+    DriverUpdateRequest:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [available, busy, offline]
+        vehicleType:
+          type: string
+        location:
+          $ref: "#/components/schemas/Location"
+    DriverLocationRequest:
+      type: object
+      required: [latitude, longitude]
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+    DriverListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Driver"
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    Location:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        address:
+          type: string
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
